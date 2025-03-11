@@ -82,13 +82,23 @@ def process_pr(pr):
     head = pr.get("head") or {}
     repo = head.get("repo") or {}
     head_repo = repo.get("full_name", "")
+
+    # Determine the final 'closed_at' value and aggressively sanitize it.
+    raw_closed_at = closed_at or pr.get("closed_at")
+    final_closed_at = sanitize_field(raw_closed_at) if raw_closed_at else raw_closed_at
+
+    # Assert that the 'closed_at' value contains no carriage returns or newlines.
+    if final_closed_at:
+        assert "\r" not in final_closed_at and "\n" not in final_closed_at, \
+            f"closed_at field contains forbidden characters: {final_closed_at}"
+
     return {
         "pr_number": pr_number,
         "head_repo": head_repo,
         "created_at": created_at,
         "review_requested_at": review_requested_at,
         "reviewing_internally_at": reviewing_internally_at,
-        "closed_at": closed_at or pr.get("closed_at")
+        "closed_at": final_closed_at
     }
 
 
@@ -104,11 +114,22 @@ def get_pr_landing_latency(record):
         if closed_str:
             closed_time = datetime.strptime(closed_str, dt_format)
         else:
-            closed_time = datetime.utcnow()
+            closed_time = datetime.now(datetime.UTC)
         return (closed_time - review_time).total_seconds() / 3600
     except Exception as e:
         logging.warning(f"Failed to compute latency for PR #{record.get('pr_number')}: {e}")
     return None
+
+
+def sanitize_field(field):
+    # Remove all carriage return and newline characters, and trim surrounding whitespace.
+    return field.replace('\r', '').replace('\n', '').strip() if field else field
+
+
+def sanitize_record(record):
+    # Sanitize all string fields in the record.
+    return {key: sanitize_field(val) if isinstance(val, str) else val
+            for key, val in record.items()}
 
 
 def main():
@@ -122,6 +143,8 @@ def main():
         with open(csv_file, "r", newline="") as f:
             reader = csv.DictReader(f)
             for row in reader:
+                # Sanitize the 'closed_at' field (or ideally all fields) as soon as we read them.
+                row["closed_at"] = sanitize_field(row.get("closed_at"))
                 all_records[str(row["pr_number"])] = row
         logging.info(f"Loaded {len(all_records)} existing PR records from CSV.")
     except FileNotFoundError:
@@ -140,7 +163,7 @@ def main():
                 logging.info(
                     f"Skipping PR #{pr_number} as it's already marked as closed in CSV. {remaining} PR(s) remaining."
                 )
-                updated_records[pr_number] = existing_record
+                updated_records[pr_number] = sanitize_record(existing_record)
                 continue
             else:
                 logging.info(
@@ -154,13 +177,15 @@ def main():
         if latency is not None:
             logging.info(f"PR #{pr_number} latency from review requested to closed: {latency:.2f} hours")
 
-    # Write all updated records to CSV (rewrite entire file)
+    # Before writing, sanitize every record as a last pass.
+    sanitized_records = [sanitize_record(rec) for rec in updated_records.values()]
+    # Write all updated records to CSV (rewrite entire file) using newline=""
     with open(csv_file, "w", newline="") as csvfile:
         fieldnames = ["pr_number", "head_repo", "created_at", "review_requested_at", "reviewing_internally_at", "closed_at"]
         writer = csv.DictWriter(csvfile, fieldnames=fieldnames)
         writer.writeheader()
-        writer.writerows(updated_records.values())
-    logging.info(f"Updated CSV file '{csv_file}' with {len(updated_records)} PR records.")
+        writer.writerows(sanitized_records)
+    logging.info(f"Updated CSV file '{csv_file}' with {len(sanitized_records)} PR records.")
 
 
 if __name__ == "__main__":
