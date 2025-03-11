@@ -66,6 +66,8 @@ def process_pr(pr):
     review_requested_at = None
     reviewing_internally_at = None
     closed_at = None
+    ready_for_review_at = None
+    first_review_at = None
 
     events = fetch_timeline_events(pr_number)
     for event in events:
@@ -74,10 +76,23 @@ def process_pr(pr):
             break  # Only use events from the first lifecycle
         if event.get("event") == "review_requested" and review_requested_at is None:
             review_requested_at = event.get("created_at")
+        if event.get("event") == "ready_for_review" and ready_for_review_at is None:
+            ready_for_review_at = event.get("created_at")
+        if event.get("event") in ["review_submitted", "reviewed"] and first_review_at is None:
+            first_review_at = event.get("created_at")
         if event.get("event") == "labeled":
             label = event.get("label", {}).get("name", "").lower()
             if label == "reviewing internally" and reviewing_internally_at is None:
                 reviewing_internally_at = event.get("created_at")
+
+    # Fallback: if no explicit review requested event and PR is not a draft, then:
+    if not review_requested_at and not pr.get("draft", False):
+        if ready_for_review_at:
+            review_requested_at = ready_for_review_at
+        elif first_review_at:
+            review_requested_at = first_review_at
+        else:
+            review_requested_at = created_at
 
     head = pr.get("head") or {}
     repo = head.get("repo") or {}
@@ -114,7 +129,7 @@ def get_pr_landing_latency(record):
         if closed_str:
             closed_time = datetime.strptime(closed_str, dt_format)
         else:
-            closed_time = datetime.now(datetime.UTC)
+            closed_time = datetime.utcnow()
         return (closed_time - review_time).total_seconds() / 3600
     except Exception as e:
         logging.warning(f"Failed to compute latency for PR #{record.get('pr_number')}: {e}")
