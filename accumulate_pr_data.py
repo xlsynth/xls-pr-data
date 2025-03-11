@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 # SPDX-License-Identifier: Apache-2.0
 import logging
+import argparse
 
 logging.basicConfig(level=logging.INFO, format='%(asctime)s [%(levelname)s] %(message)s')
 
@@ -11,7 +12,7 @@ import sys
 from datetime import datetime
 
 
-def fetch_prs():
+def fetch_prs(max_pages=None):
     token = os.environ.get("GITHUB_TOKEN")
     if not token:
         logging.error("Please set GITHUB_TOKEN environment variable.")
@@ -32,6 +33,8 @@ def fetch_prs():
         if not data:
             break
         prs.extend(data)
+        if max_pages is not None and page >= max_pages:
+            break
         page += 1
     logging.info(f"Fetched {len(prs)} PRs in total.")
     return prs
@@ -76,7 +79,9 @@ def process_pr(pr):
             if label == "reviewing internally" and reviewing_internally_at is None:
                 reviewing_internally_at = event.get("created_at")
 
-    head_repo = pr.get("head", {}).get("repo", {}).get("full_name", "")
+    head = pr.get("head") or {}
+    repo = head.get("repo") or {}
+    head_repo = repo.get("full_name", "")
     return {
         "pr_number": pr_number,
         "head_repo": head_repo,
@@ -101,43 +106,48 @@ def get_pr_landing_latency(record):
 
 
 def main():
+    parser = argparse.ArgumentParser(description="Accumulate GitHub PR data.")
+    parser.add_argument("--max-pages", type=int, default=None, help="Limit the number of PR pages to fetch for testing.")
+    args = parser.parse_args()
+
     csv_file = "pr_data.csv"
-    existing_data = {}
+    all_records = {}
     try:
         with open(csv_file, "r", newline="") as f:
             reader = csv.DictReader(f)
             for row in reader:
-                existing_data[str(row["pr_number"])] = row
-        logging.info(f"Loaded {len(existing_data)} existing PR records from CSV.")
+                all_records[str(row["pr_number"])] = row
+        logging.info(f"Loaded {len(all_records)} existing PR records from CSV.")
     except FileNotFoundError:
         logging.info("CSV file not found. A new one will be created.")
 
-    prs = fetch_prs()
-    new_records = []
+    prs = fetch_prs(args.max_pages)
+    updated_records = {}
     for pr in prs:
         pr_number = str(pr["number"])
-        if pr_number in existing_data:
-            logging.info(f"Skipping PR #{pr_number} as it's already processed.")
-            continue
-        logging.info(f"Processing PR #{pr_number}...")
+        # If record exists and the PR is not open, keep existing record.
+        if pr_number in all_records:
+            if pr.get("state", "").lower() != "open":
+                logging.info(f"Skipping PR #{pr_number} as it's already processed and closed.")
+                updated_records[pr_number] = all_records[pr_number]
+                continue
+            else:
+                logging.info(f"PR #{pr_number} is still open. Reprocessing for updates.")
+        else:
+            logging.info(f"Processing new PR #{pr_number}...")
         record = process_pr(pr)
-        new_records.append(record)
+        updated_records[pr_number] = record
         latency = get_pr_landing_latency(record)
         if latency is not None:
             logging.info(f"PR #{pr_number} latency from review requested to closed: {latency:.2f} hours")
 
-    if not new_records:
-        logging.info("No new PRs to add.")
-        return
-
-    write_header = not existing_data
-    with open(csv_file, "a", newline="") as csvfile:
+    # Write all updated records to CSV (rewrite entire file)
+    with open(csv_file, "w", newline="") as csvfile:
         fieldnames = ["pr_number", "head_repo", "created_at", "review_requested_at", "reviewing_internally_at", "closed_at"]
         writer = csv.DictWriter(csvfile, fieldnames=fieldnames)
-        if write_header:
-            writer.writeheader()
-        writer.writerows(new_records)
-    logging.info(f"Updated CSV file '{csv_file}' with {len(new_records)} new PR records.")
+        writer.writeheader()
+        writer.writerows(updated_records.values())
+    logging.info(f"Updated CSV file '{csv_file}' with {len(updated_records)} PR records.")
 
 
 if __name__ == "__main__":

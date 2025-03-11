@@ -12,8 +12,10 @@ To generate the report:
 1. Set your GITHUB_TOKEN environment variable.
 2. Run:
 
-    python accumulate_pr_data.py
-    python plot_pr_delays.py
+   ```shell
+   python accumulate_pr_data.py
+   python plot_pr_delays.py
+   ```
 
 The following diagram shows the typical PR delays for PRs originating from the xlsynth/xlsynth repository:
 
