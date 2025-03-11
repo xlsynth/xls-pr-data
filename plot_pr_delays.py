@@ -4,41 +4,60 @@
 import pandas as pd
 import matplotlib.pyplot as plt
 
-
 def main():
     # Read CSV data
     df = pd.read_csv('pr_data.csv')
     # Filter for PRs from xlsynth/xlsynth
     df = df[df['head_repo'] == 'xlsynth/xlsynth']
 
-    # Parse dates and compute delays in hours
+    # Parse dates
     for col in ['created_at', 'review_requested_at', 'reviewing_internally_at', 'closed_at']:
         df[col] = pd.to_datetime(df[col], errors='coerce')
 
-    df['delay_created_to_review_requested'] = (df['review_requested_at'] - df['created_at']).dt.total_seconds() / 3600
-    df['delay_review_requested_to_reviewing_internally'] = (df['reviewing_internally_at'] - df['review_requested_at']).dt.total_seconds() / 3600
-    df['delay_reviewing_internally_to_closed'] = (df['closed_at'] - df['reviewing_internally_at']).dt.total_seconds() / 3600
+    # Compute latency from review requested to closed (in hours)
+    df['latency'] = (df['closed_at'] - df['review_requested_at']).dt.total_seconds() / 3600
 
-    # Prepare data for boxplot; filter out NaN values
-    data_to_plot = [
-        df['delay_created_to_review_requested'].dropna(),
-        df['delay_review_requested_to_reviewing_internally'].dropna(),
-        df['delay_reviewing_internally_to_closed'].dropna()
-    ]
+    # Filter out negative latencies
+    df = df[df['latency'] >= 0]
 
-    labels = [
-        'Creation -> Review Requested',
-        'Review Requested -> Reviewing Internally',
-        'Reviewing Internally -> Closed'
-    ]
+    # Drop rows where 'closed_at' is NaT
+    df = df.dropna(subset=['closed_at'])
+
+    # Assign group based on closed_at date
+    now = pd.Timestamp.now(tz='UTC')
+    def assign_group(closed_date):
+        if closed_date.year == now.year and closed_date.month == now.month:
+            return "This Month"
+        previous = now - pd.DateOffset(months=1)
+        if closed_date.year == previous.year and closed_date.month == previous.month:
+            return "Previous Month"
+        return "All Before"
+    df['group'] = df['closed_at'].apply(assign_group)
+
+    # Define the group order
+    groups = ["This Month", "Previous Month", "All Before"]
+    data_to_plot = [df[df['group'] == g]['latency'].dropna() for g in groups]
+
+    # Compute summary statistics for 'This Month'
+    this_month_data = df[df['group'] == "This Month"]['latency'].dropna()
+    if not this_month_data.empty:
+        count = this_month_data.count()
+        mean_val = this_month_data.mean()
+        median_val = this_month_data.median()
+        title = f"Latency Distribution (This Month: n={count}, avg={mean_val:.2f} hrs, med={median_val:.2f} hrs)"
+    else:
+        title = "Latency Distribution (This Month: No data)"
 
     plt.figure(figsize=(10, 6))
-    plt.boxplot(data_to_plot, labels=labels)
-    plt.ylabel('Delay (Hours)')
-    plt.title('PR Lifecycle Delays for xlsynth/xlsynth')
-    plt.savefig('pr_delays.png')
+    bp = plt.boxplot(data_to_plot, labels=groups, patch_artist=True)
+    # Define colors for each group
+    colors = ['lightgreen', 'skyblue', 'salmon']
+    for patch, color in zip(bp['boxes'], colors):
+        patch.set_facecolor(color)
+    plt.ylabel("Latency (Hours)")
+    plt.title(title)
+    plt.savefig("pr_delays.png")
     print("Plot saved as pr_delays.png")
-
 
 if __name__ == '__main__':
     main()
