@@ -14,14 +14,33 @@ def main():
     for col in ['created_at', 'review_requested_at', 'reviewing_internally_at', 'closed_at']:
         df[col] = pd.to_datetime(df[col], errors='coerce')
 
+    # Get current UTC time
+    current_utc = pd.Timestamp.now(tz='UTC')
+
+    # Identify open PRs (those with missing 'closed_at')
+    open_prs = df[df['closed_at'].isna()]
+    open_pr_count = len(open_prs)
+    if open_pr_count > 0:
+        print("Open PRs and their current latency:")
+        for idx, row in open_prs.iterrows():
+            # If review_requested_at is missing, we cannot compute latency.
+            if pd.isna(row['review_requested_at']):
+                latency_str = "N/A"
+            else:
+                latency_val = (current_utc - row['review_requested_at']).total_seconds() / 3600
+                latency_str = f"{latency_val:.2f} hours"
+            print(f"PR #{row['pr_number']}: {latency_str}")
+    else:
+        print("No open PRs found.")
+
+    # Fill missing 'closed_at' with current UTC for open PRs
+    df['closed_at'] = df['closed_at'].fillna(current_utc)
+
     # Compute latency from review requested to closed (in hours)
     df['latency'] = (df['closed_at'] - df['review_requested_at']).dt.total_seconds() / 3600
 
     # Filter out negative latencies
     df = df[df['latency'] >= 0]
-
-    # Drop rows where 'closed_at' is NaT
-    df = df.dropna(subset=['closed_at'])
 
     # Assign group based on closed_at date
     now = pd.Timestamp.now(tz='UTC')
@@ -39,14 +58,15 @@ def main():
     data_to_plot = [df[df['group'] == g]['latency'].dropna() for g in groups]
 
     # Compute summary statistics for 'This Month'
-    this_month_data = df[df['group'] == "This Month"]['latency'].dropna()
+    this_month_data = df[df['group'] == "This Month"]['latency']
     if not this_month_data.empty:
         count = this_month_data.count()
         mean_val = this_month_data.mean()
         median_val = this_month_data.median()
-        title = f"Latency Distribution (This Month: n={count}, avg={mean_val:.2f} hrs, med={median_val:.2f} hrs)"
+        title = (f"Latency Distribution (This Month: n={count}, open={open_pr_count}, "
+                 f"avg={mean_val:.2f} hrs, med={median_val:.2f} hrs)")
     else:
-        title = "Latency Distribution (This Month: No data)"
+        title = f"Latency Distribution (This Month: No data, open={open_pr_count})"
 
     plt.figure(figsize=(10, 6))
     bp = plt.boxplot(data_to_plot, labels=groups, patch_artist=True)

@@ -93,15 +93,21 @@ def process_pr(pr):
 
 
 def get_pr_landing_latency(record):
-    """Compute latency in hours from review requested to closed for a given PR record. Returns a float or None."""
-    if record.get("review_requested_at") and record.get("closed_at"):
-        try:
-            dt_format = '%Y-%m-%dT%H:%M:%SZ'
-            review_time = datetime.strptime(record["review_requested_at"], dt_format)
-            closed_time = datetime.strptime(record["closed_at"], dt_format)
-            return (closed_time - review_time).total_seconds() / 3600
-        except Exception as e:
-            logging.warning(f"Failed to compute latency for PR #{record.get('pr_number')}: {e}")
+    """Compute latency in hours from review requested to closed (or current time if open) for a given PR record. Returns a float or None."""
+    if not record.get("review_requested_at"):
+        return None
+    dt_format = '%Y-%m-%dT%H:%M:%SZ'
+    try:
+        review_time = datetime.strptime(record["review_requested_at"], dt_format)
+        # If PR is closed, use the closed_at timestamp; otherwise, use the current UTC time.
+        closed_str = record.get("closed_at")
+        if closed_str:
+            closed_time = datetime.strptime(closed_str, dt_format)
+        else:
+            closed_time = datetime.utcnow()
+        return (closed_time - review_time).total_seconds() / 3600
+    except Exception as e:
+        logging.warning(f"Failed to compute latency for PR #{record.get('pr_number')}: {e}")
     return None
 
 
