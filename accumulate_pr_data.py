@@ -135,12 +135,17 @@ def main():
         pr_number = str(pr["number"])
         # If record exists and the PR is not open, keep existing record.
         if pr_number in all_records:
-            if pr.get("state", "").lower() != "open":
-                logging.info(f"Skipping PR #{pr_number} as it's already processed and closed. {remaining} PR(s) remaining.")
-                updated_records[pr_number] = all_records[pr_number]
+            existing_record = all_records[pr_number]
+            if existing_record.get("closed_at"):
+                logging.info(
+                    f"Skipping PR #{pr_number} as it's already marked as closed in CSV. {remaining} PR(s) remaining."
+                )
+                updated_records[pr_number] = existing_record
                 continue
             else:
-                logging.info(f"PR #{pr_number} is still open. Reprocessing for updates. {remaining} PR(s) remaining.")
+                logging.info(
+                    f"PR #{pr_number} is not yet marked as closed in CSV. Reprocessing for updates. {remaining} PR(s) remaining."
+                )
         else:
             logging.info(f"Processing new PR #{pr_number}... {remaining} PR(s) remaining.")
         record = process_pr(pr)
