@@ -123,18 +123,20 @@ def main():
 
     prs = fetch_prs(args.max_pages)
     updated_records = {}
-    for pr in prs:
+    total = len(prs)
+    for idx, pr in enumerate(prs, start=1):
+        remaining = total - idx
         pr_number = str(pr["number"])
         # If record exists and the PR is not open, keep existing record.
         if pr_number in all_records:
             if pr.get("state", "").lower() != "open":
-                logging.info(f"Skipping PR #{pr_number} as it's already processed and closed.")
+                logging.info(f"Skipping PR #{pr_number} as it's already processed and closed. {remaining} PR(s) remaining.")
                 updated_records[pr_number] = all_records[pr_number]
                 continue
             else:
-                logging.info(f"PR #{pr_number} is still open. Reprocessing for updates.")
+                logging.info(f"PR #{pr_number} is still open. Reprocessing for updates. {remaining} PR(s) remaining.")
         else:
-            logging.info(f"Processing new PR #{pr_number}...")
+            logging.info(f"Processing new PR #{pr_number}... {remaining} PR(s) remaining.")
         record = process_pr(pr)
         updated_records[pr_number] = record
         latency = get_pr_landing_latency(record)
