@@ -34,10 +34,10 @@ jobs:
           # Check if pr_data.csv has any changes compared to HEAD.
           if git diff --exit-code pr_data.csv; then
             echo "CSV unchanged, skipping plot and commit."
-            echo "::set-output name=changed::false"
+            echo "changed=false" >> $GITHUB_OUTPUT
           else
             echo "CSV changed, proceeding with plot and commit."
-            echo "::set-output name=changed::true"
+            echo "changed=true" >> $GITHUB_OUTPUT
           fi
 
       - name: Plot PR Delays
