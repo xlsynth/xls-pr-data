@@ -38,7 +38,10 @@ jobs:
           git add pr_data.csv pr_delays.png
           if ! git diff --quiet --cached; then
             git commit -m "Automatic update: PR data and plot"
-            git push
+            git push "https://${GITHUB_ACTOR}:${MY_PAT}@github.com/${GITHUB_REPOSITORY}.git" HEAD:${GITHUB_REF}
           else
             echo "No changes to commit."
           fi
+
+permissions:
+  contents: write
