@@ -28,10 +28,24 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: python accumulate_pr_data.py
 
+      - name: Check if CSV Changed
+        id: csv_check
+        run: |
+          # Check if pr_data.csv has any changes compared to HEAD.
+          if git diff --exit-code pr_data.csv; then
+            echo "CSV unchanged, skipping plot and commit."
+            echo "::set-output name=changed::false"
+          else
+            echo "CSV changed, proceeding with plot and commit."
+            echo "::set-output name=changed::true"
+          fi
+
       - name: Plot PR Delays
+        if: steps.csv_check.outputs.changed == 'true'
         run: python plot_pr_delays.py
 
       - name: Commit updated CSV and plot
+        if: steps.csv_check.outputs.changed == 'true'
         run: |
           git config user.name "github-actions"
           git config user.email "xlsynth-github-actions@xlsynth.org"
