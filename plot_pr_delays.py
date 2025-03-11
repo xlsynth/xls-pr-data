@@ -10,15 +10,15 @@ def main():
     df = pd.read_csv('pr_data.csv')
     # Filter for PRs from xlsynth/xlsynth
     df = df[df['head_repo'] == 'xlsynth/xlsynth']
-    
+
     # Parse dates and compute delays in hours
     for col in ['created_at', 'review_requested_at', 'reviewing_internally_at', 'closed_at']:
         df[col] = pd.to_datetime(df[col], errors='coerce')
-        
+
     df['delay_created_to_review_requested'] = (df['review_requested_at'] - df['created_at']).dt.total_seconds() / 3600
     df['delay_review_requested_to_reviewing_internally'] = (df['reviewing_internally_at'] - df['review_requested_at']).dt.total_seconds() / 3600
     df['delay_reviewing_internally_to_closed'] = (df['closed_at'] - df['reviewing_internally_at']).dt.total_seconds() / 3600
-    
+
     # Prepare data for boxplot; filter out NaN values
     data_to_plot = [
         df['delay_created_to_review_requested'].dropna(),
@@ -41,4 +41,4 @@ def main():
 
 
 if __name__ == '__main__':
-    main() 
+    main()
