@@ -53,9 +53,18 @@ def main():
         return "All Before"
     df['group'] = df['closed_at'].apply(assign_group)
 
-    # Define the group order
+    # Define the group order and data for plotting
     groups = ["This Month", "Previous Month", "All Before"]
     data_to_plot = [df[df['group'] == g]['latency'].dropna() for g in groups]
+    # Define new x-axis labels with month-year for 'This Month' and 'Previous Month'
+    this_month_label_plot = f"This Month\n{now.strftime('%Y-%m')}"
+    previous_month_label_plot = f"Previous Month\n{(now - pd.DateOffset(months=1)).strftime('%Y-%m')}"
+    all_before_label_plot = "All Before"
+    plot_labels = [this_month_label_plot, previous_month_label_plot, all_before_label_plot]
+    # Create figure for the plot
+    plt.figure(figsize=(10, 6))
+
+    bp = plt.boxplot(data_to_plot, labels=plot_labels, patch_artist=True)
 
     # Compute summary statistics for 'This Month'
     this_month_data = df[df['group'] == "This Month"]['latency']
@@ -63,13 +72,11 @@ def main():
         count = this_month_data.count()
         mean_val = this_month_data.mean()
         median_val = this_month_data.median()
-        title = (f"Latency Distribution (This Month: n={count}, open={open_pr_count}, "
-                 f"avg={mean_val:.2f} hrs, med={median_val:.2f} hrs)")
+        title = (f"Latency Distribution (n={count}, open={open_pr_count}, avg={mean_val:.2f} hrs, med={median_val:.2f} hrs)\n"
+                 f"Data as of: {now.strftime('%Y-%m-%d')}")
     else:
-        title = f"Latency Distribution (This Month: No data, open={open_pr_count})"
+        title = f"Latency Distribution (No data, open={open_pr_count})\nData as of: {now.strftime('%Y-%m-%d')}"
 
-    plt.figure(figsize=(10, 6))
-    bp = plt.boxplot(data_to_plot, labels=groups, patch_artist=True)
     # Define colors for each group
     colors = ['lightgreen', 'skyblue', 'salmon']
     for patch, color in zip(bp['boxes'], colors):
