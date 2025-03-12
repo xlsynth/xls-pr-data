@@ -3,10 +3,24 @@
 
 import pandas as pd
 import matplotlib.pyplot as plt
+import os
+import json
 
 def main():
     # Read CSV data
     df = pd.read_csv('pr_data.csv')
+    metadata_file = "pr_data_meta.json"
+    if os.path.exists(metadata_file):
+        try:
+            with open(metadata_file, "r") as f:
+                metadata = json.load(f)
+            data_collected = pd.to_datetime(metadata.get("last_scrape"))
+        except Exception:
+            data_collected = pd.Timestamp.now(tz='UTC')
+    else:
+        data_collected = pd.Timestamp.now(tz='UTC')
+    data_time_str = data_collected.strftime('%Y-%m-%d %H:%M:%S')
+
     # Filter for PRs from xlsynth/xlsynth
     df = df[df['head_repo'] == 'xlsynth/xlsynth']
 
@@ -73,9 +87,9 @@ def main():
         mean_val = this_month_data.mean()
         median_val = this_month_data.median()
         title = (f"Latency Distribution (n={count}, open={open_pr_count}, avg={mean_val:.2f} hrs, med={median_val:.2f} hrs)\n"
-                 f"Data as of: {now.strftime('%Y-%m-%d')}")
+                 f"Data as of: {data_time_str} UTC")
     else:
-        title = f"Latency Distribution (No data, open={open_pr_count})\nData as of: {now.strftime('%Y-%m-%d')}"
+        title = f"Latency Distribution (No data, open={open_pr_count})\nData as of: {data_time_str} UTC"
 
     # Define colors for each group
     colors = ['lightgreen', 'skyblue', 'salmon']
