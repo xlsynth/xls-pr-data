@@ -7,3 +7,10 @@ repos:
       - id: check-merge-conflict
       - id: check-yaml
         files: \.(yaml|yml)$
+  - repo: local
+    hooks:
+      - id: pytest
+        name: Run tests with pytest
+        entry: pytest
+        language: system
+        pass_filenames: false
