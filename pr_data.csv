@@ -1,9 +1,11 @@
 pr_number,head_repo,created_at,review_requested_at,reviewing_internally_at,closed_at
+2332,google/xls,2025-06-04T15:31:37Z,,,
+2331,google/xls,2025-06-04T13:45:35Z,,,2025-06-04T15:51:08Z
 2330,google/xls,2025-06-04T02:24:40Z,,,
 2329,xlsynth/xlsynth,2025-06-04T02:14:57Z,2025-06-04T04:30:03Z,,
 2328,google/xls,2025-06-03T23:56:38Z,2025-06-03T23:57:58Z,,
-2327,google/xls,2025-06-03T21:21:45Z,,,
-2326,google/xls,2025-06-03T20:42:10Z,,,
+2327,google/xls,2025-06-03T21:21:45Z,,,2025-06-04T14:13:47Z
+2326,google/xls,2025-06-03T20:42:10Z,,,2025-06-04T15:22:22Z
 2325,google/xls,2025-06-03T20:10:17Z,,,2025-06-03T20:12:36Z
 2324,google/xls,2025-06-03T19:27:03Z,,,2025-06-03T20:23:17Z
 2323,google/xls,2025-06-03T18:16:41Z,,,2025-06-03T19:42:48Z
