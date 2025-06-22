@@ -1,6 +1,6 @@
 pr_number,head_repo,created_at,review_requested_at,reviewing_internally_at,closed_at
 2451,xlsynth/xlsynth,2025-06-22T00:28:35Z,2025-06-22T01:41:01Z,,
-2449,xlsynth/xlsynth,2025-06-21T23:33:24Z,,,
+2449,xlsynth/xlsynth,2025-06-21T23:33:24Z,2025-06-22T02:40:00Z,,
 2447,google/xls,2025-06-20T20:46:31Z,,,2025-06-20T20:49:16Z
 2446,google/xls,2025-06-20T20:46:08Z,,,2025-06-20T21:12:49Z
 2445,google/xls,2025-06-20T20:46:04Z,,,2025-06-20T21:05:27Z
