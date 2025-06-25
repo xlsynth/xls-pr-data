@@ -1,8 +1,15 @@
 pr_number,head_repo,created_at,review_requested_at,reviewing_internally_at,closed_at
+2475,google/xls,2025-06-24T21:07:00Z,,,
+2474,google/xls,2025-06-24T21:06:03Z,,,
+2473,google/xls,2025-06-24T20:24:59Z,,,
+2472,google/xls,2025-06-24T19:23:06Z,,,
+2471,google/xls,2025-06-24T19:13:39Z,,,2025-06-24T20:19:11Z
+2470,google/xls,2025-06-24T17:46:35Z,,,2025-06-24T19:40:04Z
+2469,google/xls,2025-06-24T16:41:11Z,,,
 2467,google/xls,2025-06-24T13:35:04Z,,,2025-06-24T15:19:48Z
 2466,google/xls,2025-06-23T22:44:21Z,,,
 2465,google/xls,2025-06-23T22:42:49Z,,,
-2464,google/xls,2025-06-23T21:29:37Z,,,
+2464,google/xls,2025-06-23T21:29:37Z,,,2025-06-24T22:16:46Z
 2463,google/xls,2025-06-23T20:30:44Z,,,2025-06-24T13:54:36Z
 2460,google/xls,2025-06-23T18:23:57Z,,,2025-06-23T23:45:23Z
 2459,google/xls,2025-06-23T16:38:32Z,,,2025-06-23T17:37:28Z
@@ -35,7 +42,7 @@ pr_number,head_repo,created_at,review_requested_at,reviewing_internally_at,close
 2413,google/xls,2025-06-17T06:09:15Z,,,
 2412,google/xls,2025-06-17T01:38:27Z,,,
 2411,hzeller/xls,2025-06-16T21:11:23Z,2025-06-16T21:11:23Z,2025-06-16T23:30:36Z,2025-06-17T06:59:54Z
-2410,google/xls,2025-06-16T18:10:10Z,,,
+2410,google/xls,2025-06-16T18:10:10Z,,,2025-06-24T22:54:37Z
 2408,google/xls,2025-06-16T15:28:30Z,,,2025-06-16T17:08:11Z
 2407,google/xls,2025-06-16T15:03:09Z,,,
 2406,google/xls,2025-06-16T14:27:46Z,,,
