@@ -1,10 +1,11 @@
 pr_number,head_repo,created_at,review_requested_at,reviewing_internally_at,closed_at
+2568,google/xls,2025-07-10T16:19:56Z,,,
 2567,google/xls,2025-07-09T23:18:46Z,,,
 2566,google/xls,2025-07-09T20:52:40Z,,,2025-07-09T21:15:45Z
-2565,google/xls,2025-07-09T20:23:13Z,,,
-2564,google/xls,2025-07-09T19:46:35Z,,,
+2565,google/xls,2025-07-09T20:23:13Z,,,2025-07-10T15:27:49Z
+2564,google/xls,2025-07-09T19:46:35Z,,,2025-07-10T15:25:35Z
 2563,google/xls,2025-07-09T19:08:30Z,,,2025-07-09T20:12:49Z
-2562,google/xls,2025-07-09T17:22:48Z,,,
+2562,google/xls,2025-07-09T17:22:48Z,,,2025-07-10T15:25:09Z
 2561,google/xls,2025-07-09T13:58:30Z,,,2025-07-09T15:59:34Z
 2560,google/xls,2025-07-09T01:36:46Z,,,
 2559,google/xls,2025-07-08T22:02:41Z,,,
@@ -25,7 +26,7 @@ pr_number,head_repo,created_at,review_requested_at,reviewing_internally_at,close
 2542,google/xls,2025-07-07T04:09:47Z,,,2025-07-07T04:24:32Z
 2541,google/xls,2025-07-06T19:32:58Z,,,2025-07-09T20:38:55Z
 2540,google/xls,2025-07-06T19:28:00Z,,,2025-07-09T20:22:38Z
-2539,psivaraj/xls,2025-07-05T17:03:45Z,,,
+2539,psivaraj/xls,2025-07-05T17:03:45Z,2025-07-10T14:59:31Z,,
 2538,antmicro/xls,2025-07-04T21:56:17Z,2025-07-07T10:43:55Z,2025-07-08T08:37:34Z,
 2537,google/xls,2025-07-04T08:40:02Z,,,2025-07-07T01:50:34Z
 2535,google/xls,2025-07-03T21:59:58Z,,,2025-07-09T19:34:08Z
