@@ -1,4 +1,5 @@
 pr_number,head_repo,created_at,review_requested_at,reviewing_internally_at,closed_at
+2636,hzeller/xls,2025-07-18T12:36:16Z,2025-07-18T13:34:56Z,2025-07-18T13:35:15Z,2025-07-18T14:01:12Z
 2635,google/xls,2025-07-17T23:53:08Z,,,2025-07-17T23:56:00Z
 2634,google/xls,2025-07-17T23:22:20Z,,,
 2633,google/xls,2025-07-17T22:42:49Z,,,
@@ -7,7 +8,7 @@ pr_number,head_repo,created_at,review_requested_at,reviewing_internally_at,close
 2630,google/xls,2025-07-17T19:52:27Z,,,
 2629,google/xls,2025-07-17T16:56:05Z,,,2025-07-17T17:40:55Z
 2628,google/xls,2025-07-17T16:40:16Z,,,2025-07-17T17:15:20Z
-2627,hzeller/xls,2025-07-17T13:28:58Z,2025-07-17T13:28:58Z,,
+2627,hzeller/xls,2025-07-17T13:28:58Z,2025-07-18T14:37:22Z,2025-07-18T14:37:42Z,2025-07-18T15:10:42Z
 2626,google/xls,2025-07-17T12:54:54Z,,,
 2625,google/xls,2025-07-16T21:11:56Z,,,2025-07-17T21:42:06Z
 2624,google/xls,2025-07-16T20:29:59Z,,,2025-07-17T14:53:28Z
