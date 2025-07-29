@@ -1,4 +1,6 @@
 pr_number,head_repo,created_at,review_requested_at,reviewing_internally_at,closed_at
+2718,google/xls,2025-07-29T16:18:11Z,,,
+2717,antmicro/xls,2025-07-29T09:14:42Z,2025-07-29T09:23:23Z,,
 2716,antmicro/xls,2025-07-29T07:02:41Z,2025-07-29T07:26:34Z,,
 2715,google/xls,2025-07-29T03:11:30Z,,,
 2714,google/xls,2025-07-29T01:48:25Z,,,
