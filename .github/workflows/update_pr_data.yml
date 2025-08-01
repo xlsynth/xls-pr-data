@@ -40,16 +40,16 @@ jobs:
             echo "changed=true" >> $GITHUB_OUTPUT
           fi
 
-      - name: Plot PR Delays
+      - name: Update All artefacts
         if: steps.csv_check.outputs.changed == 'true'
-        run: python plot_pr_delays.py
+        run: python update_all.py
 
       - name: Commit updated CSV and plot
         if: steps.csv_check.outputs.changed == 'true'
         run: |
           git config user.name "github-actions"
           git config user.email "xlsynth-github-actions@xlsynth.org"
-          git add pr_data.csv pr_delays.png
+          git add pr_data.csv pr_delays.png pr_counts.png README.md
           if ! git diff --quiet --cached; then
             git commit -m "Automatic update: PR data and plot"
             git push "https://${GITHUB_ACTOR}:${MY_PAT}@github.com/${GITHUB_REPOSITORY}.git" HEAD:${GITHUB_REF}
