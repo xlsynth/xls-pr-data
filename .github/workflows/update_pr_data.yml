@@ -40,8 +40,10 @@ jobs:
             echo "changed=true" >> $GITHUB_OUTPUT
           fi
 
-      - name: Update All artefacts
+      - name: Update All artifacts
         if: steps.csv_check.outputs.changed == 'true'
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: python update_all.py
 
       - name: Commit updated CSV and plot
