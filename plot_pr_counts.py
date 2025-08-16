@@ -69,7 +69,7 @@ def prepare_dataframe() -> pd.DataFrame:
 
 def count_prs_by_month(df: pd.DataFrame) -> pd.Series:
     """Return a Series indexed by YYYY-MM (string) with PR counts."""
-    # Use 
+    # Use
     counts = (
         df["created_at"].dt.to_period("M")
         .value_counts()
