@@ -1,16 +1,18 @@
 #!/usr/bin/env python3
 # SPDX-License-Identifier: Apache-2.0
-"""Convenience wrapper that refreshes PR data, renders plots, and updates README.
+"""Convenience wrapper that refreshes PR data, renders plots, updates README,
+and regenerates Piper commit CSV.
 
 Rather than running four separate commands, execute:
 
     python update_all.py
 
 Steps executed (in order):
-1. accumulate_pr_data.main()   – downloads / updates `pr_data.csv`
-2. plot_pr_delays.main()       – saves latency box-plot to `pr_delays.png`
-3. plot_pr_counts.main()       – saves monthly count bar chart to `pr_counts.png`
-4. generate_pr_links_table.main() – rewrites PR-links table in *README.md*
+1. accumulate_pr_data.main()       – downloads / updates `pr_data.csv`
+2. plot_pr_delays.main()           – saves latency box-plot to `pr_delays.png`
+3. plot_pr_counts.main()           – saves monthly count bar chart to `pr_counts.png`
+4. generate_pr_links_table.main()  – rewrites PR-links table in *README.md*
+5. accumulate_piper_commits.main() – scans repo and writes `piper_commits.csv`
 
 Each sub-script is invoked as a library function so the entire pipeline runs in
 one Python process.  Command-line arguments intended for *update_all.py* are
@@ -34,6 +36,7 @@ _STEPS: List[Tuple[str, str]] = [
     ("plot_pr_delays", "main"),
     ("plot_pr_counts", "main"),
     ("generate_pr_links_table", "main"),
+    ("accumulate_piper_commits", "main"),
 ]
 
 
