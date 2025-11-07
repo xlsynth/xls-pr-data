@@ -5,7 +5,7 @@ pr_number,head_repo,created_at,review_requested_at,reviewing_internally_at,close
 3322,google/xls,2025-11-06T22:26:50Z,,,
 3321,google/xls,2025-11-06T21:52:28Z,,,
 3320,google/xls,2025-11-06T21:51:10Z,,,2025-11-07T00:26:44Z
-3319,google/xls,2025-11-06T19:13:53Z,,,
+3319,google/xls,2025-11-06T19:13:53Z,,,2025-11-07T15:13:23Z
 3318,google/xls,2025-11-06T18:59:26Z,,,2025-11-06T20:18:44Z
 3317,xlsynth/xlsynth,2025-11-06T18:15:09Z,2025-11-06T18:15:16Z,,2025-11-06T18:50:22Z
 3316,google/xls,2025-11-06T15:37:20Z,,,2025-11-06T17:39:56Z
@@ -29,7 +29,7 @@ pr_number,head_repo,created_at,review_requested_at,reviewing_internally_at,close
 3291,google/xls,2025-11-04T20:43:05Z,,,2025-11-05T16:44:26Z
 3290,google/xls,2025-11-04T19:22:13Z,,,2025-11-04T19:57:44Z
 3287,google/xls,2025-11-04T17:51:54Z,,,2025-11-04T19:09:41Z
-3286,google/xls,2025-11-04T11:11:12Z,,,
+3286,google/xls,2025-11-04T11:11:12Z,,,2025-11-07T16:10:36Z
 3285,google/xls,2025-11-04T03:04:34Z,,,2025-11-04T18:07:23Z
 3284,google/xls,2025-11-04T00:52:18Z,,,2025-11-04T03:20:05Z
 3283,google/xls,2025-11-03T23:54:21Z,,,2025-11-04T03:24:19Z
