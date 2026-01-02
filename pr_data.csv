@@ -1,7 +1,7 @@
 pr_number,head_repo,created_at,review_requested_at,reviewing_internally_at,closed_at
-3640,xlsynth/xlsynth,2026-01-02T03:36:12Z,2026-01-02T04:18:08Z,,
-3639,xlsynth/xlsynth,2026-01-01T01:02:40Z,2026-01-01T01:34:49Z,,
-3638,xlsynth/xlsynth,2025-12-31T18:36:32Z,2025-12-31T19:18:30Z,,
+3640,xlsynth/xlsynth,2026-01-02T03:36:12Z,2026-01-02T04:18:08Z,2026-01-02T14:18:24Z,
+3639,xlsynth/xlsynth,2026-01-01T01:02:40Z,2026-01-02T14:22:47Z,2026-01-02T14:24:16Z,
+3638,xlsynth/xlsynth,2025-12-31T18:36:32Z,2026-01-02T14:19:45Z,,
 3636,antmicro/xls,2025-12-31T13:11:28Z,2025-12-31T13:11:28Z,,
 3635,google/xls,2025-12-31T00:27:04Z,,,
 3634,google/xls,2025-12-31T00:22:28Z,,,
@@ -28,7 +28,7 @@ pr_number,head_repo,created_at,review_requested_at,reviewing_internally_at,close
 3613,google/xls,2025-12-27T13:05:21Z,2025-12-27T13:05:21Z,,
 3612,google/xls,2025-12-27T00:43:26Z,,,2025-12-27T14:14:49Z
 3611,google/xls,2025-12-26T22:54:59Z,,,2025-12-30T00:29:24Z
-3610,google/xls,2025-12-26T22:40:10Z,,,
+3610,google/xls,2025-12-26T22:40:10Z,,,2026-01-02T14:52:10Z
 3609,google/xls,2025-12-26T22:38:13Z,,,2025-12-30T18:20:14Z
 3608,google/xls,2025-12-26T22:33:30Z,,,
 3607,google/xls,2025-12-26T19:02:03Z,,,2025-12-30T23:31:17Z
@@ -511,7 +511,7 @@ pr_number,head_repo,created_at,review_requested_at,reviewing_internally_at,close
 3038,google/xls,2025-09-10T19:46:07Z,,,2025-09-29T17:34:39Z
 3037,google/xls,2025-09-10T19:45:20Z,,,2025-09-29T17:34:31Z
 3036,google/xls,2025-09-10T16:06:08Z,,,2025-09-11T17:56:45Z
-3035,antmicro/xls,2025-09-10T15:11:37Z,2025-09-10T18:55:47Z,,
+3035,antmicro/xls,2025-09-10T15:11:37Z,2025-09-10T18:55:47Z,,2026-01-02T09:01:59Z
 3034,antmicro/xls,2025-09-10T14:57:33Z,2025-09-10T14:57:33Z,2025-09-11T10:35:03Z,2025-09-11T18:55:27Z
 3033,google/xls,2025-09-10T01:38:07Z,,,2025-09-10T15:01:44Z
 3032,google/xls,2025-09-09T20:42:27Z,,,2025-09-12T13:41:33Z
