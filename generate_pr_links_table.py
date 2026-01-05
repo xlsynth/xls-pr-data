@@ -23,6 +23,7 @@ current::
 from __future__ import annotations
 
 import csv
+from dataclasses import dataclass
 from datetime import datetime
 from pathlib import Path
 from collections import defaultdict
@@ -32,14 +33,22 @@ README_FILE = Path("README.md")
 FILTER_REPO = "xlsynth/xlsynth"
 MARKER_START = "<!-- PR_LINKS_TABLE_START -->"
 MARKER_END = "<!-- PR_LINKS_TABLE_END -->"
+OPEN_EMOJI = "🚧"
+PR_LINK_SEPARATOR = " · "
 
 
-def load_links_by_month() -> dict[str, list[int]]:
-    """Return a mapping ``YYYY-MM -> [pr_numbers]`` sorted by month."""
+@dataclass(frozen=True)
+class PrLink:
+    number: int
+    is_open: bool
+
+
+def load_links_by_month() -> dict[str, list[PrLink]]:
+    """Return a mapping ``YYYY-MM -> [PrLink]`` sorted by month."""
     if not CSV_FILE.exists():
         raise SystemExit(f"CSV file '{CSV_FILE}' not found – run accumulate_pr_data.py first.")
 
-    links_by_month: dict[str, list[int]] = defaultdict(list)
+    links_by_month: dict[str, list[PrLink]] = defaultdict(list)
     with CSV_FILE.open(newline="") as f:
         reader = csv.DictReader(f)
         for row in reader:
@@ -50,23 +59,34 @@ def load_links_by_month() -> dict[str, list[int]]:
                 continue
             dt = datetime.fromisoformat(created_at.replace("Z", "+00:00"))
             month_key = dt.strftime("%Y-%m")
-            links_by_month[month_key].append(int(row["pr_number"]))
+            pr_number = int(row["pr_number"])
+            closed_at = (row.get("closed_at") or "").strip()
+            links_by_month[month_key].append(PrLink(number=pr_number, is_open=not closed_at))
 
     # Sort PR numbers within each month for consistency.
-    for num_list in links_by_month.values():
-        num_list.sort()
+    for links in links_by_month.values():
+        links.sort(key=lambda link: link.number)
 
     return dict(sorted(links_by_month.items()))
 
 
-def build_table(links_by_month: dict[str, list[int]]) -> str:
+def build_table(links_by_month: dict[str, list[PrLink]]) -> str:
     """Construct the Markdown table as a multiline string (no trailing newline)."""
-    lines: list[str] = ["| Month | PRs |", "| ----- | ---- |"]
-    for month, numbers in links_by_month.items():
-        links = " ".join(
-            f"[#{n}](https://github.com/google/xls/pull/{n})" for n in numbers
+    has_open_prs = any(link.is_open for links in links_by_month.values() for link in links)
+    lines: list[str] = []
+    if has_open_prs:
+        lines.extend([f"{OPEN_EMOJI} = still open (not merged yet)", ""])
+    lines.extend(["| Month | PRs |", "| ----- | ---- |"])
+    for month, month_links in links_by_month.items():
+        pr_links = PR_LINK_SEPARATOR.join(
+            (
+                f"[#{link.number} {OPEN_EMOJI}](https://github.com/google/xls/pull/{link.number})"
+                if link.is_open
+                else f"[#{link.number}](https://github.com/google/xls/pull/{link.number})"
+            )
+            for link in month_links
         )
-        lines.append(f"| {month} | {links} |")
+        lines.append(f"| {month} | {pr_links} |")
     return "\n".join(lines)
 
 
