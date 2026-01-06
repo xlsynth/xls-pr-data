@@ -12,6 +12,17 @@ import sys
 from datetime import datetime
 
 
+def parse_bool_field(raw_value):
+    if raw_value is None:
+        return False
+    text = str(raw_value).strip().lower()
+    if text in ("1", "true", "t", "yes", "y"):
+        return True
+    if text in ("", "0", "false", "f", "no", "n", "none", "null"):
+        return False
+    raise ValueError(f"Unexpected boolean value: {raw_value!r}")
+
+
 def fetch_prs(max_pages=None):
     token = os.environ.get("GITHUB_TOKEN")
     if not token:
@@ -63,6 +74,7 @@ def fetch_timeline_events(pr_number):
 def process_pr(pr):
     pr_number = pr["number"]
     created_at = pr["created_at"]
+    is_draft = bool(pr.get("draft", False))
     review_requested_at = None
     reviewing_internally_at = None
     closed_at = None
@@ -111,6 +123,7 @@ def process_pr(pr):
         "pr_number": pr_number,
         "head_repo": head_repo,
         "created_at": created_at,
+        "is_draft": is_draft,
         "review_requested_at": review_requested_at,
         "reviewing_internally_at": reviewing_internally_at,
         "closed_at": final_closed_at
@@ -119,6 +132,8 @@ def process_pr(pr):
 
 def get_pr_landing_latency(record):
     """Compute latency in hours from review requested to closed (or current time if open) for a given PR record. Returns a float or None."""
+    if record.get("is_draft"):
+        return None
     if not record.get("review_requested_at"):
         return None
     dt_format = '%Y-%m-%dT%H:%M:%SZ'
@@ -160,6 +175,7 @@ def main():
             for row in reader:
                 # Sanitize the 'closed_at' field (or ideally all fields) as soon as we read them.
                 row["closed_at"] = sanitize_field(row.get("closed_at"))
+                row["is_draft"] = parse_bool_field(row.get("is_draft"))
                 all_records[str(row["pr_number"])] = row
         logging.info(f"Loaded {len(all_records)} existing PR records from CSV.")
     except FileNotFoundError:
@@ -196,7 +212,15 @@ def main():
     sanitized_records = [sanitize_record(rec) for rec in updated_records.values()]
     # Write all updated records to CSV (rewrite entire file) using newline=""
     with open(csv_file, "w", newline="") as csvfile:
-        fieldnames = ["pr_number", "head_repo", "created_at", "review_requested_at", "reviewing_internally_at", "closed_at"]
+        fieldnames = [
+            "pr_number",
+            "head_repo",
+            "created_at",
+            "is_draft",
+            "review_requested_at",
+            "reviewing_internally_at",
+            "closed_at",
+        ]
         writer = csv.DictWriter(csvfile, fieldnames=fieldnames)
         writer.writeheader()
         writer.writerows(sanitized_records)

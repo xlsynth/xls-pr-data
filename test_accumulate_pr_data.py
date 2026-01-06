@@ -30,6 +30,18 @@ class TestProcessPR(unittest.TestCase):
         self.assertEqual(processed["reviewing_internally_at"], "2023-01-01T13:00:00Z")
         self.assertEqual(processed["closed_at"], "2023-01-01T14:00:00Z")
         self.assertEqual(processed["head_repo"], "xlsynth/xlsynth")
+        self.assertFalse(processed["is_draft"])
+
+
+class TestLatency(unittest.TestCase):
+    def test_get_pr_landing_latency_excludes_draft(self):
+        record = {
+            "pr_number": 123,
+            "is_draft": True,
+            "review_requested_at": "2023-01-01T12:00:00Z",
+            "closed_at": "2023-01-01T14:00:00Z",
+        }
+        self.assertIsNone(accumulate_pr_data.get_pr_landing_latency(record))
 
 
 if __name__ == '__main__':

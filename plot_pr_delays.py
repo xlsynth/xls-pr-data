@@ -82,6 +82,23 @@ def main():
     # Filter for PRs from xlsynth/xlsynth
     df = df[df['head_repo'] == 'xlsynth/xlsynth']
 
+    # Exclude draft PRs from latency reporting/plotting.
+    if 'is_draft' not in df.columns:
+        df['is_draft'] = False
+    else:
+        def _parse_is_draft(value):
+            if pd.isna(value):
+                return False
+            text = str(value).strip().lower()
+            if text in ("1", "true", "t", "yes", "y"):
+                return True
+            if text in ("", "0", "false", "f", "no", "n", "none", "null"):
+                return False
+            raise ValueError(f"Unexpected is_draft value: {value!r}")
+
+        df['is_draft'] = df['is_draft'].apply(_parse_is_draft)
+    df = df[~df['is_draft']]
+
     # Parse dates
     for col in ['created_at', 'review_requested_at', 'reviewing_internally_at', 'closed_at']:
         df[col] = pd.to_datetime(df[col], errors='coerce')

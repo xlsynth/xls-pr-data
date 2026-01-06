@@ -34,6 +34,7 @@ FILTER_REPO = "xlsynth/xlsynth"
 MARKER_START = "<!-- PR_LINKS_TABLE_START -->"
 MARKER_END = "<!-- PR_LINKS_TABLE_END -->"
 OPEN_EMOJI = "🚧"
+DRAFT_EMOJI = "🧪"
 PR_LINK_SEPARATOR = " · "
 
 
@@ -41,6 +42,18 @@ PR_LINK_SEPARATOR = " · "
 class PrLink:
     number: int
     is_open: bool
+    is_draft: bool
+
+
+def parse_bool_field(raw_value: str | None) -> bool:
+    if raw_value is None:
+        return False
+    text = str(raw_value).strip().lower()
+    if text in ("1", "true", "t", "yes", "y"):
+        return True
+    if text in ("", "0", "false", "f", "no", "n", "none", "null"):
+        return False
+    raise ValueError(f"Unexpected boolean value: {raw_value!r}")
 
 
 def load_links_by_month() -> dict[str, list[PrLink]]:
@@ -61,7 +74,11 @@ def load_links_by_month() -> dict[str, list[PrLink]]:
             month_key = dt.strftime("%Y-%m")
             pr_number = int(row["pr_number"])
             closed_at = (row.get("closed_at") or "").strip()
-            links_by_month[month_key].append(PrLink(number=pr_number, is_open=not closed_at))
+            is_open = not closed_at
+            is_draft = is_open and parse_bool_field(row.get("is_draft"))
+            links_by_month[month_key].append(
+                PrLink(number=pr_number, is_open=is_open, is_draft=is_draft)
+            )
 
     # Sort PR numbers within each month for consistency.
     for links in links_by_month.values():
@@ -72,17 +89,28 @@ def load_links_by_month() -> dict[str, list[PrLink]]:
 
 def build_table(links_by_month: dict[str, list[PrLink]]) -> str:
     """Construct the Markdown table as a multiline string (no trailing newline)."""
-    has_open_prs = any(link.is_open for links in links_by_month.values() for link in links)
+    has_draft_prs = any(link.is_draft for links in links_by_month.values() for link in links)
+    has_open_non_draft_prs = any(
+        link.is_open and not link.is_draft for links in links_by_month.values() for link in links
+    )
     lines: list[str] = []
-    if has_open_prs:
-        lines.extend([f"{OPEN_EMOJI} = still open (not merged yet)", ""])
+    if has_draft_prs:
+        lines.append(f"{DRAFT_EMOJI} = draft (open)")
+    if has_open_non_draft_prs:
+        lines.append(f"{OPEN_EMOJI} = still open (not merged yet)")
+    if has_draft_prs or has_open_non_draft_prs:
+        lines.append("")
     lines.extend(["| Month | PRs |", "| ----- | ---- |"])
     for month, month_links in links_by_month.items():
         pr_links = PR_LINK_SEPARATOR.join(
             (
-                f"[#{link.number} {OPEN_EMOJI}](https://github.com/google/xls/pull/{link.number})"
-                if link.is_open
-                else f"[#{link.number}](https://github.com/google/xls/pull/{link.number})"
+                f"[#{link.number} {DRAFT_EMOJI}](https://github.com/google/xls/pull/{link.number})"
+                if link.is_draft
+                else (
+                    f"[#{link.number} {OPEN_EMOJI}](https://github.com/google/xls/pull/{link.number})"
+                    if link.is_open
+                    else f"[#{link.number}](https://github.com/google/xls/pull/{link.number})"
+                )
             )
             for link in month_links
         )
