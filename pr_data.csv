@@ -1,11 +1,13 @@
 pr_number,head_repo,created_at,is_draft,review_requested_at,reviewing_internally_at,closed_at
+3666,google/xls,2026-01-08T16:10:39Z,True,,,
+3665,google/xls,2026-01-08T14:50:59Z,True,,,
 3664,google/xls,2026-01-07T21:19:03Z,True,,,2026-01-07T22:02:05Z
 3663,google/xls,2026-01-07T21:18:38Z,True,,,
 3662,google/xls,2026-01-07T19:36:57Z,True,,,
 3660,google/xls,2026-01-07T16:38:06Z,True,,,2026-01-07T18:28:01Z
 3659,google/xls,2026-01-07T16:05:46Z,True,,,
 3658,google/xls,2026-01-07T14:59:04Z,True,,,
-3657,google/xls,2026-01-07T03:52:09Z,True,,,
+3657,google/xls,2026-01-07T03:52:09Z,True,,,2026-01-08T15:06:01Z
 3656,google/xls,2026-01-06T22:17:27Z,True,,,2026-01-07T20:13:57Z
 3655,google/xls,2026-01-06T21:11:06Z,True,,,
 3654,google/xls,2026-01-06T18:50:48Z,True,,,
@@ -19,7 +21,7 @@ pr_number,head_repo,created_at,is_draft,review_requested_at,reviewing_internally
 3646,google/xls,2026-01-05T19:22:03Z,True,,,2026-01-06T23:16:22Z
 3645,google/xls,2026-01-05T16:43:21Z,False,,,2026-01-05T17:46:30Z
 3644,google/xls,2026-01-05T15:54:27Z,True,,,
-3643,xlsynth/xlsynth,2026-01-03T05:50:10Z,False,2026-01-03T06:58:24Z,2026-01-06T19:43:15Z,
+3643,xlsynth/xlsynth,2026-01-03T05:50:10Z,False,2026-01-08T13:54:54Z,2026-01-06T19:43:15Z,
 3642,google/xls,2026-01-02T21:05:13Z,False,,,2026-01-05T21:52:32Z
 3641,google/xls,2026-01-02T21:02:10Z,False,,,2026-01-05T18:46:57Z
 3640,xlsynth/xlsynth,2026-01-02T03:36:12Z,False,2026-01-02T04:18:08Z,2026-01-02T14:18:24Z,
