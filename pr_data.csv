@@ -1,4 +1,6 @@
 pr_number,head_repo,created_at,is_draft,review_requested_at,reviewing_internally_at,closed_at
+3671,xlsynth/xlsynth,2026-01-10T23:37:50Z,False,2026-01-11T00:25:04Z,,
+3670,xlsynth/xlsynth,2026-01-10T21:34:38Z,False,2026-01-10T22:01:45Z,,
 3669,google/xls,2026-01-09T15:19:35Z,True,,,
 3668,google/xls,2026-01-09T00:16:25Z,False,2026-01-09T00:16:25Z,,
 3667,google/xls,2026-01-08T23:43:48Z,True,,,
