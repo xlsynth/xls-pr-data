@@ -1,4 +1,6 @@
 pr_number,head_repo,created_at,is_draft,review_requested_at,reviewing_internally_at,closed_at
+3676,google/xls,2026-01-12T15:46:02Z,True,,,
+3675,google/xls,2026-01-12T15:45:38Z,True,,,
 3674,google/xls,2026-01-12T02:20:25Z,True,,,
 3673,xlsynth/xlsynth,2026-01-12T00:53:21Z,False,2026-01-12T01:21:04Z,,
 3672,xlsynth/xlsynth,2026-01-11T20:57:20Z,False,2026-01-11T21:23:25Z,,
@@ -6,7 +8,7 @@ pr_number,head_repo,created_at,is_draft,review_requested_at,reviewing_internally
 3670,xlsynth/xlsynth,2026-01-10T21:34:38Z,False,2026-01-10T22:01:45Z,,
 3669,google/xls,2026-01-09T15:19:35Z,True,,,
 3668,google/xls,2026-01-09T00:16:25Z,False,2026-01-09T00:16:25Z,,
-3667,google/xls,2026-01-08T23:43:48Z,True,,,
+3667,google/xls,2026-01-08T23:43:48Z,True,,,2026-01-12T13:58:17Z
 3666,google/xls,2026-01-08T16:10:39Z,True,,,
 3665,google/xls,2026-01-08T14:50:59Z,True,,,2026-01-09T15:38:02Z
 3664,google/xls,2026-01-07T21:19:03Z,True,,,2026-01-07T22:02:05Z
@@ -332,7 +334,7 @@ pr_number,head_repo,created_at,is_draft,review_requested_at,reviewing_internally
 3272,google/xls,2025-10-31T14:37:10Z,False,,,2025-10-31T17:29:37Z
 3271,google/xls,2025-10-31T14:12:16Z,False,,,2025-10-31T14:15:15Z
 3270,google/xls,2025-10-31T14:09:46Z,False,,,2025-10-31T15:00:58Z
-3268,antmicro/xls,2025-10-31T13:30:03Z,False,2025-11-20T13:41:03Z,,
+3268,antmicro/xls,2025-10-31T13:30:03Z,False,2025-11-20T13:41:03Z,2026-01-12T13:00:57Z,
 3267,google/xls,2025-10-30T19:40:10Z,False,,,2025-11-04T19:00:10Z
 3266,google/xls,2025-10-30T14:01:35Z,False,,,2025-10-30T15:53:17Z
 3265,google/xls,2025-10-30T14:00:21Z,False,,,2025-10-30T16:37:03Z
