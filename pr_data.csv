@@ -1,6 +1,6 @@
 pr_number,head_repo,created_at,is_draft,review_requested_at,reviewing_internally_at,closed_at
 3732,google/xls,2026-01-25T01:00:49Z,True,,,
-3731,xlsynth/xlsynth,2026-01-24T22:38:10Z,True,2026-01-24T22:38:24Z,,
+3731,xlsynth/xlsynth,2026-01-24T22:38:10Z,False,2026-01-24T22:38:24Z,,
 3730,google/xls,2026-01-24T13:33:26Z,False,2026-01-24T13:33:26Z,,
 3729,google/xls,2026-01-24T13:33:15Z,False,2026-01-24T13:33:15Z,,
 3728,google/xls,2026-01-24T13:33:04Z,False,2026-01-24T13:33:04Z,,
@@ -56,7 +56,7 @@ pr_number,head_repo,created_at,is_draft,review_requested_at,reviewing_internally
 3675,google/xls,2026-01-12T15:45:38Z,True,,,2026-01-15T15:57:26Z
 3674,google/xls,2026-01-12T02:20:25Z,True,,,2026-01-12T22:46:51Z
 3673,xlsynth/xlsynth,2026-01-12T00:53:21Z,False,2026-01-20T17:50:58Z,,
-3672,xlsynth/xlsynth,2026-01-11T20:57:20Z,False,2026-01-11T21:23:25Z,2026-01-15T19:34:21Z,
+3672,xlsynth/xlsynth,2026-01-11T20:57:20Z,False,2026-01-11T21:23:25Z,2026-01-15T19:34:21Z,2026-01-25T18:30:08Z
 3671,xlsynth/xlsynth,2026-01-10T23:37:50Z,False,2026-01-11T00:25:04Z,2026-01-15T17:26:46Z,
 3670,xlsynth/xlsynth,2026-01-10T21:34:38Z,False,2026-01-10T22:01:45Z,2026-01-15T15:11:41Z,
 3669,google/xls,2026-01-09T15:19:35Z,True,,,2026-01-12T16:42:46Z
