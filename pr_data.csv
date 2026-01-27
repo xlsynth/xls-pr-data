@@ -1,4 +1,6 @@
 pr_number,head_repo,created_at,is_draft,review_requested_at,reviewing_internally_at,closed_at
+3744,google/xls,2026-01-27T04:18:31Z,True,,,
+3743,xlsynth/xlsynth,2026-01-27T04:04:46Z,False,2026-01-27T05:13:46Z,,
 3742,google/xls,2026-01-27T02:01:01Z,True,,,
 3741,google/xls,2026-01-27T00:05:19Z,True,,,
 3740,google/xls,2026-01-26T23:42:25Z,True,,,
@@ -50,7 +52,7 @@ pr_number,head_repo,created_at,is_draft,review_requested_at,reviewing_internally
 3689,xlsynth/xlsynth,2026-01-15T22:05:35Z,False,2026-01-15T22:05:45Z,2026-01-20T21:00:15Z,
 3688,google/xls,2026-01-15T14:46:34Z,True,,,2026-01-15T22:39:02Z
 3687,google/xls,2026-01-15T14:44:16Z,True,,,2026-01-15T21:41:01Z
-3686,google/xls,2026-01-15T04:19:56Z,True,,,
+3686,google/xls,2026-01-15T04:19:56Z,True,,,2026-01-27T03:14:25Z
 3685,xlsynth/xlsynth,2026-01-14T04:32:18Z,False,2026-01-14T04:32:18Z,,
 3684,google/xls,2026-01-13T23:07:27Z,True,,,2026-01-15T20:34:47Z
 3683,google/xls,2026-01-13T23:02:01Z,True,,,2026-01-15T19:20:39Z
