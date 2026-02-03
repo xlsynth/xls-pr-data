@@ -3,7 +3,7 @@ pr_number,head_repo,created_at,is_draft,review_requested_at,reviewing_internally
 3783,google/xls,2026-02-02T20:53:54Z,True,,,2026-02-03T01:01:55Z
 3782,google/xls,2026-02-02T19:47:47Z,True,,,2026-02-02T22:10:47Z
 3781,google/xls,2026-02-02T19:43:49Z,True,,,2026-02-03T00:12:02Z
-3780,google/xls,2026-02-02T17:32:11Z,True,,,
+3780,google/xls,2026-02-02T17:32:11Z,True,,,2026-02-03T14:47:10Z
 3779,google/xls,2026-02-02T16:51:33Z,True,,,
 3778,google/xls,2026-02-02T15:42:31Z,True,,,
 3777,google/xls,2026-02-02T15:36:15Z,True,,,2026-02-02T18:10:35Z
@@ -34,7 +34,7 @@ pr_number,head_repo,created_at,is_draft,review_requested_at,reviewing_internally
 3749,google/xls,2026-01-27T20:37:26Z,True,,,
 3748,google/xls,2026-01-27T18:43:07Z,True,,,2026-01-27T19:17:00Z
 3747,google/xls,2026-01-27T18:36:39Z,True,,,2026-01-28T19:52:56Z
-3745,antmicro/xls,2026-01-27T14:18:21Z,True,,,
+3745,antmicro/xls,2026-01-27T14:18:21Z,False,2026-02-03T11:37:55Z,,
 3744,google/xls,2026-01-27T04:18:31Z,True,,,2026-01-27T19:13:22Z
 3743,xlsynth/xlsynth,2026-01-27T04:04:46Z,False,2026-01-27T05:13:46Z,2026-01-27T14:29:52Z,
 3742,google/xls,2026-01-27T02:01:01Z,True,,,2026-02-02T18:35:08Z
