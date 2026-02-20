@@ -35,6 +35,8 @@ MARKER_START = "<!-- PR_LINKS_TABLE_START -->"
 MARKER_END = "<!-- PR_LINKS_TABLE_END -->"
 OPEN_EMOJI = "🚧"
 DRAFT_EMOJI = "🧪"
+GOOGLE_TURN_EMOJI = "👉"
+OUR_TURN_EMOJI = "👋"
 PR_LINK_SEPARATOR = " · "
 
 
@@ -43,6 +45,7 @@ class PrLink:
     number: int
     is_open: bool
     is_draft: bool
+    is_googles_turn: bool | None
 
 
 def parse_bool_field(raw_value: str | None) -> bool:
@@ -54,6 +57,19 @@ def parse_bool_field(raw_value: str | None) -> bool:
     if text in ("", "0", "false", "f", "no", "n", "none", "null"):
         return False
     raise ValueError(f"Unexpected boolean value: {raw_value!r}")
+
+
+def parse_optional_bool_field(raw_value: str | None) -> bool | None:
+    if raw_value is None:
+        return None
+    text = str(raw_value).strip().lower()
+    if text in ("1", "true", "t", "yes", "y"):
+        return True
+    if text in ("0", "false", "f", "no", "n"):
+        return False
+    if text in ("", "none", "null"):
+        return None
+    raise ValueError(f"Unexpected optional boolean value: {raw_value!r}")
 
 
 def load_links_by_month() -> dict[str, list[PrLink]]:
@@ -76,8 +92,14 @@ def load_links_by_month() -> dict[str, list[PrLink]]:
             closed_at = (row.get("closed_at") or "").strip()
             is_open = not closed_at
             is_draft = is_open and parse_bool_field(row.get("is_draft"))
+            is_googles_turn = parse_optional_bool_field(row.get("is_googles_turn")) if is_open and not is_draft else None
             links_by_month[month_key].append(
-                PrLink(number=pr_number, is_open=is_open, is_draft=is_draft)
+                PrLink(
+                    number=pr_number,
+                    is_open=is_open,
+                    is_draft=is_draft,
+                    is_googles_turn=is_googles_turn,
+                )
             )
 
     # Sort PR numbers within each month for consistency.
@@ -93,11 +115,21 @@ def build_table(links_by_month: dict[str, list[PrLink]]) -> str:
     has_open_non_draft_prs = any(
         link.is_open and not link.is_draft for links in links_by_month.values() for link in links
     )
+    has_google_turn_prs = any(
+        link.is_googles_turn is True for links in links_by_month.values() for link in links
+    )
+    has_our_turn_prs = any(
+        link.is_googles_turn is False for links in links_by_month.values() for link in links
+    )
     lines: list[str] = []
     if has_draft_prs:
         lines.append(f"{DRAFT_EMOJI} = draft (open)")
     if has_open_non_draft_prs:
         lines.append(f"{OPEN_EMOJI} = still open (not merged yet)")
+    if has_google_turn_prs:
+        lines.append(f"{GOOGLE_TURN_EMOJI} = Google's turn")
+    if has_our_turn_prs:
+        lines.append(f"{OUR_TURN_EMOJI} = our turn")
     if has_draft_prs or has_open_non_draft_prs:
         lines.append("")
     lines.extend(["| Month | PRs |", "| ----- | ---- |"])
@@ -107,9 +139,15 @@ def build_table(links_by_month: dict[str, list[PrLink]]) -> str:
                 f"[#{link.number} {DRAFT_EMOJI}](https://github.com/google/xls/pull/{link.number})"
                 if link.is_draft
                 else (
-                    f"[#{link.number} {OPEN_EMOJI}](https://github.com/google/xls/pull/{link.number})"
-                    if link.is_open
-                    else f"[#{link.number}](https://github.com/google/xls/pull/{link.number})"
+                    f"[#{link.number} {OPEN_EMOJI} {GOOGLE_TURN_EMOJI}](https://github.com/google/xls/pull/{link.number})"
+                    if link.is_open and link.is_googles_turn is True
+                    else (
+                        f"[#{link.number} {OPEN_EMOJI} {OUR_TURN_EMOJI}](https://github.com/google/xls/pull/{link.number})"
+                        if link.is_open and link.is_googles_turn is False
+                        else f"[#{link.number} {OPEN_EMOJI}](https://github.com/google/xls/pull/{link.number})"
+                        if link.is_open
+                        else f"[#{link.number}](https://github.com/google/xls/pull/{link.number})"
+                    )
                 )
             )
             for link in month_links

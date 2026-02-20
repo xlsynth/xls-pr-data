@@ -2,7 +2,7 @@
 
 import datetime
 import pytz
-from plot_pr_delays import effective_review_time
+from plot_pr_delays import assign_group, effective_review_time
 
 PT = pytz.timezone("America/Los_Angeles")
 
@@ -68,3 +68,14 @@ def test_review_request_after_noon_on_monday_kicked_to_tuesday():
     assert effective_time_pt == expected_time, (
         f"Expected effective review time on Monday 12:01 to be {expected_time}, but got {effective_time_pt}"
     )
+
+
+def test_assign_group_buckets_dates():
+    now = datetime.datetime(2026, 2, 20, tzinfo=datetime.timezone.utc)
+    this_month = datetime.datetime(2026, 2, 1, tzinfo=datetime.timezone.utc)
+    previous_month = datetime.datetime(2026, 1, 15, tzinfo=datetime.timezone.utc)
+    older = datetime.datetime(2025, 12, 31, tzinfo=datetime.timezone.utc)
+
+    assert assign_group(this_month, now) == "This Month"
+    assert assign_group(previous_month, now) == "Previous Month"
+    assert assign_group(older, now) == "All Before"
