@@ -1,4 +1,6 @@
 pr_number,head_repo,created_at,pr_updated_at,is_draft,review_requested_at,reviewing_internally_at,closed_at,last_relevant_actor,last_relevant_at,is_googles_turn
+3874,google/xls,2026-02-21T13:33:41Z,2026-02-21T13:33:42Z,False,2026-02-21T13:33:41Z,,,dependabot[bot],2026-02-21T13:33:42Z,True
+3873,google/xls,2026-02-21T13:33:00Z,2026-02-21T13:33:01Z,False,2026-02-21T13:33:00Z,,,dependabot[bot],2026-02-21T13:33:02Z,True
 3872,google/xls,2026-02-21T02:02:50Z,2026-02-21T02:02:50Z,True,,,,,,
 3871,google/xls,2026-02-21T00:44:20Z,2026-02-21T00:44:20Z,True,,,,,,
 3870,google/xls,2026-02-21T00:42:59Z,2026-02-21T00:42:59Z,True,,,,,,
@@ -96,7 +98,7 @@ pr_number,head_repo,created_at,pr_updated_at,is_draft,review_requested_at,review
 3776,google/xls,2026-01-31T13:33:41Z,,False,2026-01-31T13:33:41Z,2026-02-12T14:39:56Z,2026-02-12T17:17:34Z,,,
 3775,google/xls,2026-01-31T13:33:16Z,2026-02-17T19:33:49Z,False,2026-01-31T13:33:16Z,,,dependabot[bot],2026-02-17T19:33:49Z,True
 3774,google/xls,2026-01-31T13:33:01Z,,False,2026-01-31T13:33:01Z,2026-02-11T15:28:26Z,2026-02-12T00:25:21Z,,,
-3773,google/xls,2026-01-31T13:32:38Z,2026-02-03T19:36:13Z,False,2026-01-31T13:32:38Z,,,dependabot[bot],2026-02-03T19:35:21Z,True
+3773,google/xls,2026-01-31T13:32:38Z,2026-02-21T13:33:46Z,False,2026-01-31T13:32:38Z,,2026-02-21T13:33:45Z,,,
 3772,google/xls,2026-01-30T20:50:08Z,,True,,,2026-02-02T19:52:07Z,,,
 3771,google/xls,2026-01-30T20:18:09Z,,True,,,2026-02-02T16:41:32Z,,,
 3770,google/xls,2026-01-30T19:45:34Z,,True,,,2026-01-30T21:44:34Z,,,
