@@ -1,11 +1,12 @@
 pr_number,head_repo,created_at,pr_updated_at,is_draft,review_requested_at,reviewing_internally_at,closed_at,last_relevant_actor,last_relevant_at,is_googles_turn
+3875,google/xls,2026-02-21T21:58:32Z,2026-02-21T21:58:32Z,True,,,,,,
 3874,google/xls,2026-02-21T13:33:41Z,2026-02-21T13:33:42Z,False,2026-02-21T13:33:41Z,,,dependabot[bot],2026-02-21T13:33:42Z,True
 3873,google/xls,2026-02-21T13:33:00Z,2026-02-21T13:33:01Z,False,2026-02-21T13:33:00Z,,,dependabot[bot],2026-02-21T13:33:02Z,True
 3872,google/xls,2026-02-21T02:02:50Z,2026-02-21T02:02:50Z,True,,,,,,
 3871,google/xls,2026-02-21T00:44:20Z,2026-02-21T00:44:20Z,True,,,,,,
 3870,google/xls,2026-02-21T00:42:59Z,2026-02-21T00:42:59Z,True,,,,,,
 3869,google/xls,2026-02-20T22:49:57Z,2026-02-20T22:49:57Z,False,2026-02-20T22:49:57Z,,,dependabot[bot],2026-02-20T22:49:58Z,True
-3868,google/xls,2026-02-20T18:18:38Z,2026-02-21T00:54:47Z,True,,,,,,
+3868,google/xls,2026-02-20T18:18:38Z,2026-02-21T17:54:23Z,True,,,2026-02-21T17:54:23Z,,,
 3867,xlsynth/xlsynth,2026-02-20T00:13:09Z,2026-02-20T01:40:32Z,False,2026-02-20T01:40:32Z,,,cdleary,2026-02-20T01:40:32Z,True
 3866,google/xls,2026-02-19T22:48:38Z,2026-02-19T22:48:38Z,True,,,,,,
 3865,google/xls,2026-02-19T21:26:15Z,,True,,,2026-02-19T22:44:41Z,,,
