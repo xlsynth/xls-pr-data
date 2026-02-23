@@ -117,6 +117,7 @@ def fetch_supplemental_turn_events(pr_number):
                 "event": "review_submitted",
                 "created_at": submitted_at,
                 "user": review.get("user"),
+                "state": review.get("state"),
             }
         )
 
@@ -277,6 +278,14 @@ def event_is_feedback(event_name: str) -> bool:
     }
 
 
+def event_is_approval_review(event: dict) -> bool:
+    event_name = event.get("event", "")
+    if event_name not in {"review_submitted", "reviewed"}:
+        return False
+    state = (event.get("state") or "").lower()
+    return state == "approved"
+
+
 def event_is_resolution(event_name: str) -> bool:
     return event_name in {
         "resolved",
@@ -318,18 +327,26 @@ def get_turn_state(
     unresolved_googler_feedback = []
     last_relevant_actor = None
     last_relevant_at = None
+    last_relevant_was_approval = False
 
     for event in events:
         event_name = event.get("event", "")
         event_time = event.get("created_at")
         event_dt = parse_event_time(event)
         actor_login = extract_actor_login(event)
+        event_is_approval = event_is_approval_review(event)
 
         if event_is_relevant_for_turn(event_name) and actor_login and event_time:
             last_relevant_actor = actor_login
             last_relevant_at = event_time
+            last_relevant_was_approval = event_is_approval
 
         if event_is_feedback(event_name) and actor_login and event_dt:
+            if event_is_approval:
+                # Approval should not block turn ownership and supersedes earlier
+                # feedback under the current heuristic.
+                unresolved_googler_feedback = []
+                continue
             is_google = classify_google_side_actor(
                 login=actor_login,
                 membership_cache=membership_cache,
@@ -372,6 +389,9 @@ def get_turn_state(
 
     if not last_relevant_actor:
         return None, None, None
+
+    if last_relevant_was_approval:
+        return True, last_relevant_actor, last_relevant_at
 
     actor_is_google = classify_google_side_actor(
         login=last_relevant_actor,

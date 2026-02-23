@@ -35,6 +35,25 @@ class TestProcessPR(unittest.TestCase):
 
 
 class TestTurnDetection(unittest.TestCase):
+    def test_latest_approval_means_googles_turn(self):
+        events = [
+            {
+                "event": "review_submitted",
+                "created_at": "2023-01-01T12:00:00Z",
+                "actor": {"login": "googler"},
+                "state": "APPROVED",
+            },
+        ]
+        with mock.patch.object(accumulate_pr_data, "is_xlsynth_org_member", return_value=False):
+            is_turn, last_actor, last_at = accumulate_pr_data.get_turn_state(
+                events=events,
+                pr_author_login="author",
+                membership_cache={},
+            )
+        self.assertTrue(is_turn)
+        self.assertEqual(last_actor, "googler")
+        self.assertEqual(last_at, "2023-01-01T12:00:00Z")
+
     def test_turn_is_googles_when_author_pushes_after_feedback(self):
         events = [
             {
