@@ -319,6 +319,21 @@ def event_is_relevant_for_turn(event_name: str) -> bool:
     }
 
 
+def event_updates_turn_owner(event_name: str) -> bool:
+    return event_name in {
+        "review_submitted",
+        "reviewed",
+        "commented",
+        "pull_request_review_comment",
+        "committed",
+        "review_requested",
+        "review_request_removed",
+        "ready_for_review",
+        "converted_to_draft",
+        "head_ref_force_pushed",
+    }
+
+
 def get_turn_state(
     events: Iterable[dict],
     pr_author_login: str,
@@ -336,7 +351,12 @@ def get_turn_state(
         actor_login = extract_actor_login(event)
         event_is_approval = event_is_approval_review(event)
 
-        if event_is_relevant_for_turn(event_name) and actor_login and event_time:
+        if (
+            event_is_relevant_for_turn(event_name)
+            and event_updates_turn_owner(event_name)
+            and actor_login
+            and event_time
+        ):
             last_relevant_actor = actor_login
             last_relevant_at = event_time
             last_relevant_was_approval = event_is_approval

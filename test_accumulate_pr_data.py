@@ -79,6 +79,31 @@ class TestTurnDetection(unittest.TestCase):
         self.assertEqual(last_actor, "author")
         self.assertEqual(last_at, "2023-01-01T12:30:00Z")
 
+    def test_label_after_approval_does_not_change_turn(self):
+        events = [
+            {
+                "event": "review_submitted",
+                "created_at": "2023-01-01T12:00:00Z",
+                "actor": {"login": "googler"},
+                "state": "APPROVED",
+            },
+            {
+                "event": "labeled",
+                "created_at": "2023-01-01T12:01:00Z",
+                "actor": {"login": "googler"},
+                "label": {"name": "Reviewing Internally"},
+            },
+        ]
+        with mock.patch.object(accumulate_pr_data, "is_xlsynth_org_member", return_value=False):
+            is_turn, last_actor, last_at = accumulate_pr_data.get_turn_state(
+                events=events,
+                pr_author_login="author",
+                membership_cache={},
+            )
+        self.assertTrue(is_turn)
+        self.assertEqual(last_actor, "googler")
+        self.assertEqual(last_at, "2023-01-01T12:00:00Z")
+
     def test_unresolved_googler_feedback_takes_precedence(self):
         events = [
             {
