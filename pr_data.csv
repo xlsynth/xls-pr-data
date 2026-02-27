@@ -1,6 +1,8 @@
 pr_number,head_repo,created_at,pr_updated_at,is_draft,review_requested_at,reviewing_internally_at,closed_at,last_relevant_actor,last_relevant_at,is_googles_turn
+3896,antmicro/xls,2026-02-27T10:11:02Z,2026-02-27T13:37:22Z,False,2026-02-27T13:30:46Z,,,magancarz,2026-02-27T13:37:22Z,True
+3895,antmicro/xls,2026-02-27T09:40:58Z,2026-02-27T16:02:04Z,False,2026-02-27T09:40:58Z,,,magancarz,2026-02-27T16:02:04Z,True
 3894,google/xls,2026-02-26T19:50:21Z,2026-02-26T19:50:21Z,True,,,,,,
-3893,google/xls,2026-02-26T19:31:22Z,2026-02-26T19:31:22Z,True,,,,,,
+3893,google/xls,2026-02-26T19:31:22Z,2026-02-27T15:35:27Z,True,,,2026-02-27T15:35:27Z,,,
 3889,xlsynth/xlsynth,2026-02-25T22:34:26Z,2026-02-26T20:35:11Z,False,2026-02-26T20:35:11Z,,,NL02,2026-02-26T20:35:11Z,False
 3887,google/xls,2026-02-25T17:10:05Z,2026-02-25T22:59:04Z,True,,,,,,
 3885,google/xls,2026-02-24T22:00:13Z,2026-02-25T01:08:04Z,True,,,2026-02-25T01:08:03Z,,,
@@ -13,7 +15,7 @@ pr_number,head_repo,created_at,pr_updated_at,is_draft,review_requested_at,review
 3878,google/xls,2026-02-23T22:19:18Z,2026-02-24T01:51:33Z,True,,,2026-02-24T01:51:30Z,,,
 3877,google/xls,2026-02-23T18:59:59Z,2026-02-26T17:55:41Z,True,,,2026-02-26T17:55:40Z,,,
 3876,google/xls,2026-02-23T15:55:43Z,2026-02-24T23:56:09Z,True,,,2026-02-24T23:56:08Z,,,
-3875,google/xls,2026-02-21T21:58:32Z,2026-02-27T06:47:24Z,True,,,,,,
+3875,google/xls,2026-02-21T21:58:32Z,2026-02-27T15:13:12Z,True,,,,,,
 3874,google/xls,2026-02-21T13:33:41Z,2026-02-21T13:33:42Z,False,2026-02-21T13:33:41Z,,,dependabot[bot],2026-02-21T13:33:42Z,True
 3873,google/xls,2026-02-21T13:33:00Z,2026-02-21T13:33:01Z,False,2026-02-21T13:33:00Z,,,dependabot[bot],2026-02-21T13:33:02Z,True
 3872,google/xls,2026-02-21T02:02:50Z,2026-02-24T22:44:58Z,True,,,2026-02-24T22:44:57Z,,,
@@ -145,7 +147,7 @@ pr_number,head_repo,created_at,pr_updated_at,is_draft,review_requested_at,review
 3740,google/xls,2026-01-26T23:42:25Z,,True,,,2026-01-27T19:22:07Z,,,
 3739,google/xls,2026-01-26T23:35:33Z,,True,,,2026-01-27T18:35:15Z,,,
 3737,google/xls,2026-01-26T21:47:20Z,,True,,,2026-01-26T22:44:32Z,,,
-3735,google/xls,2026-01-26T21:12:44Z,2026-01-26T21:12:44Z,True,,,,,,
+3735,google/xls,2026-01-26T21:12:44Z,2026-02-27T16:38:36Z,True,,,,,,
 3734,google/xls,2026-01-26T17:42:09Z,,True,,,2026-01-26T21:09:17Z,,,
 3733,google/xls,2026-01-26T17:20:18Z,,True,,,2026-01-27T20:05:14Z,,,
 3732,google/xls,2026-01-25T01:00:49Z,2026-01-25T01:00:49Z,True,,,,,,
