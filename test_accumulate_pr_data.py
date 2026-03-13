@@ -54,7 +54,7 @@ class TestTurnDetection(unittest.TestCase):
         self.assertEqual(last_actor, "googler")
         self.assertEqual(last_at, "2023-01-01T12:00:00Z")
 
-    def test_turn_is_googles_when_author_pushes_after_feedback(self):
+    def test_author_push_after_feedback_does_not_clear_feedback_blocker(self):
         events = [
             {
                 "event": "review_submitted",
@@ -75,7 +75,32 @@ class TestTurnDetection(unittest.TestCase):
                 pr_author_login="author",
                 membership_cache=membership_cache,
             )
-        self.assertTrue(is_turn)
+        self.assertFalse(is_turn)
+        self.assertEqual(last_actor, "author")
+        self.assertEqual(last_at, "2023-01-01T12:30:00Z")
+
+    def test_author_force_push_after_feedback_does_not_clear_feedback_blocker(self):
+        events = [
+            {
+                "event": "review_submitted",
+                "created_at": "2023-01-01T12:00:00Z",
+                "actor": {"login": "googler"},
+            },
+            {
+                "event": "head_ref_force_pushed",
+                "created_at": "2023-01-01T12:30:00Z",
+                "actor": {"login": "author"},
+            },
+        ]
+        membership_cache = {}
+        with mock.patch.object(accumulate_pr_data, "is_xlsynth_org_member") as member_lookup:
+            member_lookup.side_effect = lambda login, _cache: {"googler": False, "author": True}.get(login)
+            is_turn, last_actor, last_at = accumulate_pr_data.get_turn_state(
+                events=events,
+                pr_author_login="author",
+                membership_cache=membership_cache,
+            )
+        self.assertFalse(is_turn)
         self.assertEqual(last_actor, "author")
         self.assertEqual(last_at, "2023-01-01T12:30:00Z")
 
@@ -180,6 +205,30 @@ class TestTurnDetection(unittest.TestCase):
             )
         self.assertTrue(is_turn)
         self.assertEqual(last_actor, "author")
+
+    def test_author_review_request_clears_feedback_blocker(self):
+        events = [
+            {
+                "event": "review_submitted",
+                "created_at": "2023-01-01T12:00:00Z",
+                "actor": {"login": "googler"},
+            },
+            {
+                "event": "review_requested",
+                "created_at": "2023-01-01T12:10:00Z",
+                "actor": {"login": "author"},
+            },
+        ]
+        with mock.patch.object(accumulate_pr_data, "is_xlsynth_org_member") as member_lookup:
+            member_lookup.side_effect = lambda login, _cache: {"googler": False, "author": True}.get(login)
+            is_turn, last_actor, last_at = accumulate_pr_data.get_turn_state(
+                events=events,
+                pr_author_login="author",
+                membership_cache={},
+            )
+        self.assertTrue(is_turn)
+        self.assertEqual(last_actor, "author")
+        self.assertEqual(last_at, "2023-01-01T12:10:00Z")
 
     def test_non_xlsynth_reviewer_blocks_turn(self):
         events = [

@@ -33,9 +33,10 @@ Turn semantics for open non-draft PRs (`🚧`): `👉` means "Google's turn" (i.
 
 Determination precedence is:
 1. If unresolved Googler feedback exists, it is not Google's turn.
-2. Feedback is considered addressed if a thread is explicitly resolved or a newer PR-author commit appears after the feedback.
-3. Otherwise, latest relevant actor wins (Googler actor => not Google's turn; non-Googler actor => Google's turn).
-4. Actor side is determined by xlsynth-org membership: users in `xlsynth` are considered non-Googler side; users not in `xlsynth` are considered Googler side. This heuristic does not preclude Googlers from also being in `xlsynth`; those overlap cases need an explicit override list.
+2. Feedback is considered addressed if a thread is explicitly resolved or the PR author leaves a reviewer-visible follow-up after the feedback (e.g. reply/comment, review request, ready-for-review).
+3. Commits and force-pushes alone do not count as reviewer-visible follow-up.
+4. Otherwise, latest relevant actor wins (Googler actor => not Google's turn; non-Googler actor => Google's turn).
+5. Actor side is determined by xlsynth-org membership: users in `xlsynth` are considered non-Googler side; users not in `xlsynth` are considered Googler side. This heuristic does not preclude Googlers from also being in `xlsynth`; those overlap cases need an explicit override list.
 
 <!-- PR_LINKS_TABLE_START -->
 🧪 = draft (open)

@@ -241,16 +241,6 @@ def classify_google_side_actor(
     return membership is not True
 
 
-def is_author_commit_event(event: dict, pr_author_login: str) -> bool:
-    if event.get("event") != "committed":
-        return False
-    for key in ("actor", "author", "committer", "user"):
-        login = (event.get(key) or {}).get("login")
-        if login and login == pr_author_login:
-            return True
-    return False
-
-
 def extract_actor_login(event: dict) -> Optional[str]:
     for key in ("actor", "user", "author", "committer"):
         login = (event.get(key) or {}).get("login")
@@ -299,6 +289,8 @@ def event_is_author_response(event_name: str) -> bool:
         "review_submitted",
         "reviewed",
         "pull_request_review_comment",
+        "review_requested",
+        "ready_for_review",
     }
 
 
@@ -381,14 +373,6 @@ def get_turn_state(
                 unresolved_googler_feedback.pop()
             continue
 
-        if event_dt and pr_author_login and is_author_commit_event(event, pr_author_login):
-            unresolved_googler_feedback = [
-                feedback_dt
-                for feedback_dt in unresolved_googler_feedback
-                if feedback_dt > event_dt
-            ]
-            continue
-
         if (
             event_dt
             and actor_login
@@ -396,8 +380,8 @@ def get_turn_state(
             and actor_login == pr_author_login
             and event_is_author_response(event_name)
         ):
-            # Pragmatic heuristic: author replies after Googler feedback can count
-            # as "addressed" even without explicit thread resolution.
+            # Only reviewer-visible author follow-ups count as "addressed" under
+            # this heuristic; branch updates alone do not.
             unresolved_googler_feedback = [
                 feedback_dt
                 for feedback_dt in unresolved_googler_feedback
