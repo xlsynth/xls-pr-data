@@ -1,9 +1,10 @@
 pr_number,head_repo,created_at,pr_updated_at,is_draft,review_requested_at,reviewing_internally_at,closed_at,last_relevant_actor,last_relevant_at,is_googles_turn
-4276,google/xls,2026-05-17T15:38:42Z,2026-05-18T00:03:29Z,True,,,,,,
+4277,google/xls,2026-05-18T17:24:51Z,2026-05-18T17:24:51Z,True,,,,,,
+4276,google/xls,2026-05-17T15:38:42Z,2026-05-18T17:47:49Z,True,,,,,,
 4275,google/xls,2026-05-15T23:01:46Z,2026-05-15T23:45:14Z,True,,,2026-05-15T23:45:13Z,,,
 4274,google/xls,2026-05-15T22:39:17Z,2026-05-15T22:39:17Z,True,,,,,,
 4273,google/xls,2026-05-15T20:54:37Z,2026-05-15T21:16:14Z,True,,,,,,
-4272,google/xls,2026-05-15T20:04:03Z,2026-05-16T01:27:23Z,True,,,,,,
+4272,google/xls,2026-05-15T20:04:03Z,2026-05-18T16:56:57Z,True,,,2026-05-18T16:56:55Z,,,
 4271,google/xls,2026-05-15T19:19:27Z,2026-05-15T19:19:27Z,True,,,,,,
 4270,google/xls,2026-05-15T18:04:04Z,2026-05-15T18:04:04Z,True,,,,,,
 4269,google/xls,2026-05-15T17:53:34Z,2026-05-15T21:04:50Z,True,,,2026-05-15T21:04:49Z,,,
@@ -17,7 +18,7 @@ pr_number,head_repo,created_at,pr_updated_at,is_draft,review_requested_at,review
 4261,google/xls,2026-05-14T03:10:57Z,2026-05-14T21:07:43Z,True,,,2026-05-14T21:07:43Z,,,
 4259,google/xls,2026-05-13T19:45:58Z,2026-05-14T15:25:13Z,True,,,,,,
 4258,google/xls,2026-05-13T18:54:32Z,2026-05-13T22:33:19Z,True,,,2026-05-13T22:33:18Z,,,
-4257,google/xls,2026-05-13T18:36:42Z,2026-05-13T18:36:42Z,True,,,,,,
+4257,google/xls,2026-05-13T18:36:42Z,2026-05-18T14:03:43Z,True,,,,,,
 4256,google/xls,2026-05-13T17:51:15Z,2026-05-14T14:16:13Z,True,,,2026-05-14T14:16:09Z,,,
 4255,google/xls,2026-05-13T16:43:08Z,2026-05-13T18:24:57Z,True,,,2026-05-13T18:24:57Z,,,
 4254,google/xls,2026-05-13T14:17:44Z,2026-05-13T15:12:36Z,True,,,2026-05-13T15:12:35Z,,,
@@ -339,7 +340,7 @@ pr_number,head_repo,created_at,pr_updated_at,is_draft,review_requested_at,review
 3899,xlsynth/xlsynth,2026-02-28T21:42:15Z,2026-03-26T20:41:20Z,False,2026-02-28T21:42:15Z,2026-03-03T06:38:15Z,2026-03-26T20:41:20Z,,,
 3898,xlsynth/xlsynth,2026-02-28T18:54:07Z,2026-03-05T14:37:39Z,False,2026-02-28T19:27:04Z,2026-03-03T06:38:55Z,2026-03-05T14:37:38Z,,,
 3897,google/xls,2026-02-27T18:39:38Z,2026-02-28T03:11:05Z,True,,,2026-02-28T03:11:04Z,,,
-3896,antmicro/xls,2026-02-27T10:11:02Z,2026-05-18T11:36:05Z,False,2026-03-03T06:39:25Z,2026-03-04T14:18:57Z,,kbieganski,2026-05-18T11:36:05Z,False
+3896,antmicro/xls,2026-02-27T10:11:02Z,2026-05-18T16:49:31Z,False,2026-03-03T06:39:25Z,2026-03-04T14:18:57Z,,mikex-oss,2026-05-18T16:49:31Z,False
 3895,antmicro/xls,2026-02-27T09:40:58Z,2026-05-05T13:58:15Z,False,2026-03-03T06:39:56Z,,,richmckeever,2026-05-05T13:58:15Z,False
 3894,google/xls,2026-02-26T19:50:21Z,2026-02-26T19:50:21Z,True,,,,,,
 3893,google/xls,2026-02-26T19:31:22Z,2026-02-27T15:35:27Z,True,,,2026-02-27T15:35:27Z,,,
