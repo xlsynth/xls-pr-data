@@ -1,8 +1,10 @@
 pr_number,head_repo,created_at,pr_updated_at,is_draft,review_requested_at,reviewing_internally_at,closed_at,last_relevant_actor,last_relevant_at,is_googles_turn
+4291,google/xls,2026-05-20T17:59:08Z,2026-05-20T18:19:37Z,True,,,,,,
+4290,google/xls,2026-05-20T17:04:54Z,2026-05-20T17:04:54Z,True,,,,,,
 4289,google/xls,2026-05-20T06:05:49Z,2026-05-20T06:05:49Z,True,,,,,,
 4288,xlsynth/xlsynth,2026-05-20T04:31:20Z,2026-05-20T04:48:12Z,False,2026-05-20T04:33:58Z,,,dank-openai,2026-05-20T04:33:58Z,True
-4287,google/xls,2026-05-20T01:40:44Z,2026-05-20T01:40:44Z,True,,,,,,
-4286,google/xls,2026-05-19T23:07:17Z,2026-05-19T23:07:17Z,True,,,,,,
+4287,google/xls,2026-05-20T01:40:44Z,2026-05-20T16:50:50Z,True,,,,,,
+4286,google/xls,2026-05-19T23:07:17Z,2026-05-20T18:20:39Z,True,,,,,,
 4285,google/xls,2026-05-19T22:31:16Z,2026-05-19T22:31:16Z,True,,,,,,
 4284,google/xls,2026-05-19T21:16:32Z,2026-05-19T21:16:32Z,True,,,,,,
 4283,google/xls,2026-05-19T20:27:31Z,2026-05-19T20:57:45Z,True,,,,,,
@@ -353,7 +355,7 @@ pr_number,head_repo,created_at,pr_updated_at,is_draft,review_requested_at,review
 3898,xlsynth/xlsynth,2026-02-28T18:54:07Z,2026-03-05T14:37:39Z,False,2026-02-28T19:27:04Z,2026-03-03T06:38:55Z,2026-03-05T14:37:38Z,,,
 3897,google/xls,2026-02-27T18:39:38Z,2026-02-28T03:11:05Z,True,,,2026-02-28T03:11:04Z,,,
 3896,antmicro/xls,2026-02-27T10:11:02Z,2026-05-18T16:49:31Z,False,2026-03-03T06:39:25Z,2026-03-04T14:18:57Z,,mikex-oss,2026-05-18T16:49:31Z,False
-3895,antmicro/xls,2026-02-27T09:40:58Z,2026-05-05T13:58:15Z,False,2026-03-03T06:39:56Z,,,richmckeever,2026-05-05T13:58:15Z,False
+3895,antmicro/xls,2026-02-27T09:40:58Z,2026-05-20T12:48:05Z,False,2026-03-03T06:39:56Z,,,magancarz,2026-05-20T12:48:05Z,True
 3894,google/xls,2026-02-26T19:50:21Z,2026-02-26T19:50:21Z,True,,,,,,
 3893,google/xls,2026-02-26T19:31:22Z,2026-02-27T15:35:27Z,True,,,2026-02-27T15:35:27Z,,,
 3889,xlsynth/xlsynth,2026-02-25T22:34:26Z,2026-03-05T07:58:08Z,False,2026-02-26T20:35:11Z,,,proppy,2026-03-05T07:58:08Z,False
