@@ -1,4 +1,8 @@
 pr_number,head_repo,created_at,pr_updated_at,is_draft,review_requested_at,reviewing_internally_at,closed_at,last_relevant_actor,last_relevant_at,is_googles_turn
+4371,google/xls,2026-06-10T01:09:37Z,2026-06-10T01:09:54Z,True,,,,,,
+4370,google/xls,2026-06-09T22:24:44Z,2026-06-09T22:24:44Z,True,,,,,,
+4369,google/xls,2026-06-09T19:07:51Z,2026-06-09T22:04:04Z,True,,,,,,
+4368,google/xls,2026-06-09T18:54:31Z,2026-06-09T18:54:31Z,True,,,,,,
 4367,google/xls,2026-06-09T15:38:51Z,2026-06-09T15:38:51Z,True,,,,,,
 4366,google/xls,2026-06-08T20:41:22Z,2026-06-09T13:11:33Z,True,,,,,,
 4365,google/xls,2026-06-08T13:38:37Z,2026-06-08T20:50:34Z,True,,,2026-06-08T20:50:33Z,,,
