@@ -1,9 +1,10 @@
 pr_number,head_repo,created_at,pr_updated_at,is_draft,review_requested_at,reviewing_internally_at,closed_at,last_relevant_actor,last_relevant_at,is_googles_turn
-4379,google/xls,2026-06-10T20:29:05Z,2026-06-10T20:36:50Z,True,,,,,,
-4378,google/xls,2026-06-10T19:53:15Z,2026-06-10T19:53:15Z,True,,,,,,
+4381,google/xls,2026-06-11T17:48:51Z,2026-06-11T18:15:36Z,True,,,,,,
+4379,google/xls,2026-06-10T20:29:05Z,2026-06-11T18:07:47Z,True,,,,,,
+4378,google/xls,2026-06-10T19:53:15Z,2026-06-11T16:31:55Z,True,,,2026-06-11T16:31:54Z,,,
 4377,google/xls,2026-06-10T18:29:14Z,2026-06-10T19:01:33Z,True,,,2026-06-10T19:01:32Z,,,
 4375,google/xls,2026-06-10T14:58:36Z,2026-06-11T02:26:13Z,True,,,,,,
-4374,google/xls,2026-06-10T13:50:45Z,2026-06-11T11:21:57Z,True,,,,,,
+4374,google/xls,2026-06-10T13:50:45Z,2026-06-11T14:05:07Z,True,,,2026-06-11T14:05:06Z,,,
 4373,google/xls,2026-06-10T08:34:02Z,2026-06-10T08:34:19Z,True,,,,,,
 4371,google/xls,2026-06-10T01:09:37Z,2026-06-10T18:15:03Z,True,,,2026-06-10T18:15:02Z,,,
 4370,google/xls,2026-06-09T22:24:44Z,2026-06-10T22:37:05Z,True,,,2026-06-10T22:37:05Z,,,
