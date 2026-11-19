@@ -195,7 +195,8 @@ def main():
     # Create figure for the plot
     plt.figure(figsize=(10, 6))
 
-    bp = plt.boxplot(data_to_plot, labels=plot_labels, patch_artist=True)
+    bp = plt.boxplot(data_to_plot, patch_artist=True)
+    plt.xticks(range(1, len(plot_labels) + 1), plot_labels)
 
     # Compute summary statistics for this month's data.
     this_month_data = df[df['group'] == "This Month"]['latency']

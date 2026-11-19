@@ -8,22 +8,33 @@ on:
     branches:
       - main
 
+permissions: {}
+
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
+
 jobs:
   pre-commit:
-    runs-on: ubuntu-latest
+    name: pre-commit
+    runs-on: ubuntu-24.04
+    timeout-minutes: 20
+    permissions:
+      contents: read
     steps:
       - name: Checkout code
-        uses: actions/checkout@v2
-
-      - name: Set up Python 3.x
-        uses: actions/setup-python@v2
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
-          python-version: "3.x"
+          persist-credentials: false
 
-      - name: Install pre-commit
+      - name: Set up Python
+        uses: actions/setup-python@6d4fd22b20465ccc0f7354476588e8df7c9ca0e0 # v7.1.0
+        with:
+          python-version: "3.12"
+
+      - name: Install CI dependencies
         run: |
-          pip install pre-commit
-          pip install -r requirements.txt
+          python -m pip install --only-binary=:all: --require-hashes -r .github/requirements-ci.txt -r requirements.txt
 
       - name: Run pre-commit
         run: pre-commit run --all-files

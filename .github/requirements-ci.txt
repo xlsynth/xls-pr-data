@@ -1,0 +1,16 @@
+# CPython 3.12 wheels for ubuntu-24.04 x86_64. Refresh the extra entries in a fresh virtualenv:
+#   python -m pip install --only-binary=:all: --require-hashes -r .github/requirements-report.txt
+#   python -m pip --isolated install --index-url https://pypi.org/simple --only-binary=:all: \
+#     --dry-run --report wheels.json pre-commit
+#   jq -r '.install[] | "\(.metadata.name | ascii_downcase | gsub("[-_.]+"; "-"))==\(.metadata.version) --hash=sha256:\(.download_info.archive_info.hashes.sha256)"' wheels.json | LC_ALL=C sort
+-r requirements-report.txt
+cfgv==3.5.0 --hash=sha256:a8dc6b26ad22ff227d2634a65cb388215ce6cc96bbcc5cfde7641ae87e8dacc0
+distlib==0.4.4 --hash=sha256:cf09d55b1e85a89576b036aeb71550bfd68320f3f21761ca329eadadad918638
+filelock==4.2.12 --hash=sha256:21decfec02f116ed4c954433cdb31f28c3b346b784543177b6d7059da2702ee9
+identify==2.6.20 --hash=sha256:6a16b69b93187244e0548cbfd25b3e4a6f9a7a2ad784625c3bec2b8d27b81aaa
+nodeenv==1.12.0 --hash=sha256:80644d65c10cc2be12e3e4b54b3367ff288c7ad24ae75c2dcc65454fc7449d4d
+platformdirs==4.14.7 --hash=sha256:391513b74707c42335fff3ea17eaac657a7ee9ffcadd809634d34ea594d0122c
+pre-commit==4.7.0 --hash=sha256:2e229038ad3656081b70c27913157e4b636ef306f643f024a8a8e3f0f7b2f877
+python-discovery==1.9.6 --hash=sha256:93b10b90363d4151964cdeee2ec6601f3041b17fc2b253a1c3da7d6e7ddd8337
+pyyaml==6.0.3 --hash=sha256:ba1cc08a7ccde2d2ec775841541641e4548226580ab850948cbfda66a1befcdc
+virtualenv==21.15.9 --hash=sha256:c0fbae7de061402e31897d96cfbe7dc35ce93cd464fe05f9bdbecf61313447bf
