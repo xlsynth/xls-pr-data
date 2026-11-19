@@ -1,8 +1,9 @@
 # SPDX-License-Identifier: Apache-2.0
 
 import datetime
+import matplotlib.pyplot as plt
 import pytz
-from plot_pr_delays import assign_group, effective_review_time
+from plot_pr_delays import assign_group, effective_review_time, main
 
 PT = pytz.timezone("America/Los_Angeles")
 
@@ -79,3 +80,18 @@ def test_assign_group_buckets_dates():
     assert assign_group(this_month, now) == "This Month"
     assert assign_group(previous_month, now) == "Previous Month"
     assert assign_group(older, now) == "All Before"
+
+
+def test_render_delay_plot(tmp_path, monkeypatch):
+    monkeypatch.chdir(tmp_path)
+    (tmp_path / "pr_data.csv").write_text(
+        "pr_number,head_repo,created_at,review_requested_at,reviewing_internally_at,closed_at\n"
+        "1,xlsynth/xlsynth,2026-06-01T16:00:00Z,2026-06-01T17:00:00Z,,2026-06-02T18:00:00Z\n"
+    )
+
+    main()
+    labels = [tick.get_text().splitlines()[0] for tick in plt.gca().get_xticklabels()]
+    plt.close()
+
+    assert labels == ["This Month", "Previous Month", "All Before"]
+    assert (tmp_path / "pr_delays.png").read_bytes().startswith(b"\x89PNG\r\n\x1a\n")
