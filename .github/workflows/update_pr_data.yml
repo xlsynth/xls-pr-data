@@ -132,4 +132,14 @@ jobs:
         if: steps.commit.outputs.created == 'true'
         env:
           GH_TOKEN: ${{ github.token }}
-        run: git -c credential.helper='!gh auth git-credential' push origin "HEAD:$GITHUB_REF"
+        run: |
+          # A publish-only retry retains the original event and upstream job outputs.
+          default_branch=$(gh api "repos/$GITHUB_REPOSITORY" --jq .default_branch)
+          if [ "$GITHUB_REF" != "refs/heads/$default_branch" ]; then
+            echo "The generation ref is no longer the default branch. Skipping publication."
+            exit 0
+          fi
+          # Fast-forward from the generation commit only if the remote ref still points to it.
+          git merge-base --is-ancestor "$GITHUB_SHA" HEAD
+          git -c credential.helper='!gh auth git-credential' push \
+            --force-with-lease="$GITHUB_REF:$GITHUB_SHA" origin "HEAD:$GITHUB_REF"
