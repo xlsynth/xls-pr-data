@@ -9,8 +9,10 @@ import requests
 import csv
 import os
 import sys
+import time
 from datetime import datetime
 from typing import Dict, Iterable, Optional, Tuple
+from urllib.parse import urljoin, urlsplit
 
 def parse_bool_field(raw_value):
     if raw_value is None:
@@ -36,6 +38,34 @@ def parse_optional_bool_field(raw_value):
     raise ValueError(f"Unexpected optional boolean value: {raw_value!r}")
 
 
+def github_get(url, headers):
+    max_retries = 3
+    for attempt in range(max_retries + 1):
+        response = requests.get(url, headers=headers)
+        if response.status_code not in (403, 429):
+            return response
+
+        retry_after = response.headers.get("Retry-After", "")
+        reset = response.headers.get("X-RateLimit-Reset", "")
+        exhausted = response.headers.get("X-RateLimit-Remaining") == "0"
+        if retry_after.isdecimal():
+            delay = int(retry_after)
+        elif exhausted and reset.isdecimal():
+            delay = max(1, int(reset) - int(time.time()) + 1)
+        elif response.status_code == 429 or exhausted or "rate limit" in response.text.lower():
+            # GitHub recommends at least a minute for a secondary limit without a reset time.
+            delay = 60 * 2**attempt
+        else:
+            return response
+
+        if attempt == max_retries:
+            logging.error("GitHub still rate-limited %s after %d retries.", url, max_retries)
+            response.raise_for_status()
+        logging.warning("GitHub rate-limited %s (HTTP %d). Retrying in %d seconds.",
+                        url, response.status_code, delay)
+        time.sleep(delay)
+
+
 def fetch_prs(max_pages=None):
     token = os.environ.get("GITHUB_TOKEN")
     if not token:
@@ -47,19 +77,7 @@ def fetch_prs(max_pages=None):
         "Accept": "application/vnd.github.v3+json",
     }
     url = "https://api.github.com/repos/google/xls/pulls?state=all&per_page=100"
-    prs = []
-    page = 1
-    while True:
-        logging.info(f"Fetching page {page} of PRs...")
-        response = requests.get(url + f"&page={page}", headers=headers)
-        response.raise_for_status()
-        data = response.json()
-        if not data:
-            break
-        prs.extend(data)
-        if max_pages is not None and page >= max_pages:
-            break
-        page += 1
+    prs = fetch_paginated_json(url, headers, max_pages)
     logging.info(f"Fetched {len(prs)} PRs in total.")
     return prs
 
@@ -71,34 +89,32 @@ def fetch_timeline_events(pr_number):
         "Accept": "application/vnd.github.mockingbird-preview+json",
     }
     url = f"https://api.github.com/repos/google/xls/issues/{pr_number}/timeline?per_page=100"
-    events = []
-    page = 1
-    while True:
-        response = requests.get(url + f"&page={page}", headers=headers)
-        response.raise_for_status()
-        data = response.json()
-        if not data:
-            break
-        events.extend(data)
-        page += 1
-    return events
+    return fetch_paginated_json(url, headers)
 
 
-def fetch_paginated_json(url, headers):
+def fetch_paginated_json(url, headers, max_pages=None):
     items = []
+    origin = urlsplit(url)[:2]
     page = 1
     while True:
-        response = requests.get(url + f"&page={page}", headers=headers)
+        response = github_get(url, headers)
+        if response.status_code == 403:
+            logging.error("GitHub denied %s (rate limit remaining=%s, reset=%s).",
+                          url, response.headers.get("X-RateLimit-Remaining"),
+                          response.headers.get("X-RateLimit-Reset"))
         response.raise_for_status()
-        data = response.json()
-        if not data:
+        items.extend(response.json())
+        next_url = response.links.get("next", {}).get("url")
+        if not next_url or (max_pages is not None and page >= max_pages):
             break
-        items.extend(data)
+        url = urljoin(url, next_url)
+        if urlsplit(url)[:2] != origin:
+            raise ValueError("GitHub pagination link changed origin")
         page += 1
     return items
 
 
-def fetch_supplemental_turn_events(pr_number):
+def fetch_supplemental_turn_events(pr_number, *, reviews_only=False):
     token = os.environ.get("GITHUB_TOKEN")
     headers = {
         "Authorization": f"token {token}",
@@ -120,6 +136,9 @@ def fetch_supplemental_turn_events(pr_number):
                 "state": review.get("state"),
             }
         )
+
+    if reviews_only:
+        return events
 
     review_comments_url = f"{base}/pulls/{pr_number}/comments?per_page=100"
     for comment in fetch_paginated_json(review_comments_url, headers):
@@ -167,9 +186,13 @@ def fetch_supplemental_turn_events(pr_number):
     return events
 
 
-def fetch_all_events(pr_number):
+def fetch_all_events(pr_number, *, is_draft=False, is_closed=False):
     timeline_events = fetch_timeline_events(pr_number)
-    supplemental_events = fetch_supplemental_turn_events(pr_number)
+    # Drafts only use timeline lifecycle events. Closed non-drafts can also use
+    # submitted reviews to infer when review began. Only open non-drafts need turn data.
+    supplemental_events = [] if is_draft else fetch_supplemental_turn_events(
+        pr_number, reviews_only=is_closed
+    )
 
     existing_keys = {
         (event.get("event"), event.get("created_at"))
@@ -207,7 +230,7 @@ def is_xlsynth_org_member(login: str, membership_cache: Dict[str, Optional[bool]
         "Accept": "application/vnd.github.v3+json",
     }
     url = f"https://api.github.com/orgs/xlsynth/members/{login}"
-    response = requests.get(url, headers=headers)
+    response = github_get(url, headers)
     if response.status_code == 204:
         membership_cache[login] = True
         return True
@@ -419,7 +442,7 @@ def process_pr(pr, membership_cache=None):
     ready_for_review_at = None
     first_review_at = None
 
-    events = fetch_all_events(pr_number)
+    events = fetch_all_events(pr_number, is_draft=is_draft, is_closed=bool(pr.get("closed_at")))
     for event in events:
         if event.get("event") == "closed" and closed_at is None:
             closed_at = event.get("created_at")

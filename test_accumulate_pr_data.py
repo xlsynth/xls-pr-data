@@ -7,16 +7,13 @@ from unittest import mock
 
 class TestProcessPR(unittest.TestCase):
     def test_process_pr_immutable_first_lifecycle(self):
-        # Override fetch_all_events to simulate multiple lifecycle events
-        def fake_fetch_all_events(pr_number):
-            return [
-                {"event": "review_requested", "created_at": "2023-01-01T12:00:00Z"},
-                {"event": "labeled", "label": {"name": "reviewing internally"}, "created_at": "2023-01-01T13:00:00Z"},
-                {"event": "closed", "created_at": "2023-01-01T14:00:00Z"},
-                {"event": "reopened", "created_at": "2023-01-02T10:00:00Z"},
-                {"event": "closed", "created_at": "2023-01-02T12:00:00Z"},
-            ]
-        accumulate_pr_data.fetch_all_events = fake_fetch_all_events
+        events = [
+            {"event": "review_requested", "created_at": "2023-01-01T12:00:00Z"},
+            {"event": "labeled", "label": {"name": "reviewing internally"}, "created_at": "2023-01-01T13:00:00Z"},
+            {"event": "closed", "created_at": "2023-01-01T14:00:00Z"},
+            {"event": "reopened", "created_at": "2023-01-02T10:00:00Z"},
+            {"event": "closed", "created_at": "2023-01-02T12:00:00Z"},
+        ]
 
         pr = {
             "number": 123,
@@ -24,7 +21,8 @@ class TestProcessPR(unittest.TestCase):
             "closed_at": "2023-01-02T12:00:00Z",
             "head": {"repo": {"full_name": "xlsynth/xlsynth"}}
         }
-        processed = accumulate_pr_data.process_pr(pr)
+        with mock.patch.object(accumulate_pr_data, "fetch_all_events", return_value=events):
+            processed = accumulate_pr_data.process_pr(pr)
 
         # Expected to capture only the first lifecycle events
         self.assertEqual(processed["review_requested_at"], "2023-01-01T12:00:00Z")
@@ -32,6 +30,40 @@ class TestProcessPR(unittest.TestCase):
         self.assertEqual(processed["closed_at"], "2023-01-01T14:00:00Z")
         self.assertEqual(processed["head_repo"], "xlsynth/xlsynth")
         self.assertFalse(processed["is_draft"])
+
+    def test_draft_uses_only_timeline_events(self):
+        timeline = [
+            {"event": "closed", "created_at": "2023-01-03T10:00:00Z"},
+            {"event": "review_requested", "created_at": "2023-01-02T10:00:00Z"},
+        ]
+        for closed_at in (None, "2023-01-03T10:00:00Z"):
+            with self.subTest(closed_at=closed_at):
+                pr = {"number": 123, "created_at": "2023-01-01T10:00:00Z",
+                      "draft": True, "closed_at": closed_at}
+                events = timeline if closed_at else []
+                with mock.patch.object(accumulate_pr_data, "fetch_timeline_events", return_value=events), \
+                     mock.patch.object(accumulate_pr_data, "fetch_supplemental_turn_events") as supplemental:
+                    record = accumulate_pr_data.process_pr(pr)
+                supplemental.assert_not_called()
+                self.assertEqual(record["review_requested_at"], "2023-01-02T10:00:00Z" if closed_at else None)
+                self.assertEqual(record["closed_at"], closed_at)
+                self.assertIsNone(record["is_googles_turn"])
+
+    def test_closed_non_draft_uses_earliest_review_before_first_close(self):
+        pr = {"number": 123, "created_at": "2023-01-01T10:00:00Z", "closed_at": "2023-01-05T10:00:00Z"}
+        timeline = [
+            {"event": "closed", "created_at": "2023-01-04T10:00:00Z"},
+            {"event": "reviewed", "created_at": "2023-01-03T10:00:00Z"},
+        ]
+        reviews = [{"submitted_at": "2023-01-02T10:00:00Z"}]
+        with mock.patch.object(accumulate_pr_data, "fetch_timeline_events", return_value=timeline), \
+             mock.patch.object(accumulate_pr_data, "fetch_paginated_json", return_value=reviews) as get:
+            record = accumulate_pr_data.process_pr(pr)
+        get.assert_called_once()
+        self.assertIn("/pulls/123/reviews?", get.call_args.args[0])
+        self.assertEqual(record["review_requested_at"], "2023-01-02T10:00:00Z")
+        self.assertEqual(record["closed_at"], "2023-01-04T10:00:00Z")
+        self.assertIsNone(record["is_googles_turn"])
 
 
 class TestTurnDetection(unittest.TestCase):
